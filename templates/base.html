@@ -70,9 +70,17 @@
                             3
                         </span>
         </a>
-        <button class="btn btn-outline-light">
-          <i class="fas fa-user"></i>
-        </button>
+      
+        {% if user.is_authenticated %}
+          <a href="{% url 'users:profile' %}" class="btn btn-outline-light position-relative me-2">
+            <i class="fas fa-user"></i>
+          </a>
+        {% else %}
+          <a href="{% url 'users:login' %}" class="btn btn-outline-light position-relative me-2">
+            <i class="fas fa-sign-in-alt me-2"></i>
+          </a>
+        {% endif %}
+      
       </div>
     </div>
   </div>

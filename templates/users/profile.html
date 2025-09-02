@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <!-- Profile Content -->
+  <div class="container py-5 mt-5">
+    <div class="row ">
+      <!-- Sidebar -->
+      <div class="col-lg-3 mb-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="profile-avatar mb-3">
+              {% if user.image %}
+                <img src="{{ user.image.url }}" alt="" width="200">
+              {% else %}
+                <i class="fas fa-user-circle fa-5x text-muted"></i>
+              {% endif %}
+            </div>
+            <h5>{{ user.first_name }} {{ user.last_name }}</h5>
+            <p class="text-muted">{{ user.email }}</p>
+          </div>
+        </div>
+
+        <div class="list-group mt-4">
+          <a href="#profile-info" class="list-group-item list-group-item-action active" data-bs-toggle="tab">
+            <i class="fas fa-user me-2"></i>Личная информация
+          </a>
+          <a href="#orders" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+            <i class="fas fa-shopping-bag me-2"></i>Мои заказы
+          </a>
+          {% if user.is_superuser or user.is_staff %}
+            <a href="{% url 'admin:index' %}" class="list-group-item list-group-item-action">
+              <i class="fas fa-cog me-2"></i>Панель администратора
+            </a>
+          {% endif %}
+
+          <form action="{% url 'users:logout' %}" method="post" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="list-group-item list-group-item-action text-danger">
+                  <i class="fas fa-sign-out-alt me-2"></i>Выйти
+              </button>
+          </form>
+
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+        <div class="tab-content">
+          <!-- Profile Information -->
+          <div class="tab-pane fade show active" id="profile-info">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">Личная информация</h5>
+              </div>
+              <div class="card-body">
+
+                <form action="{% url 'users:profile' %}" method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="{{ form.first_name.id_for_label }}" class="form-label">Имя</label>
+                      {{ form.first_name }}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                      <label for="{{ form.last_name.id_for_label }}" class="form-label">Фамилия</label>
+                      {{ form.last_name }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    
+                    <div class="col-md-6 mb-3">
+                      <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                      {{ form.email }}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                      <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя</label>
+                      {{ form.username }}
+                    </div>
+                    
+                  </div>
+                  <div class="mb-3">
+                    <label for="{{ form.image.id_for_label }}" class="form-label">Изображение</label>
+                    {{ form.image }}
+                  </div>
+                  <button type="submit" class="btn btn-accent">Сохранить изменения</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Orders -->
+{#          <div class="tab-pane fade" id="orders">#}
+{#            <div class="card">#}
+{#              <div class="card-header">#}
+{#                <h5 class="mb-0">Мои заказы</h5>#}
+{#              </div>#}
+{#              <div class="card-body">#}
+{#                <!-- Order 1 -->#}
+{#                {% for order in orders %}#}
+{#                <div class="order-item border rounded p-3 mb-3">#}
+{#                  <div class="row align-items-center">#}
+{#                    <div class="col-md-2">#}
+{#                      <strong>Заказ #{{ order.id }}</strong>#}
+{#                      <br><small class="text-muted">{{ order.created }}</small>#}
+{#                    </div>#}
+{#                    <div class="col-md-3">#}
+{#                      <span class="badge bg-success">{{ order.get_status_display }}</span>#}
+{#                    </div>#}
+{#                    <div class="col-md-2">#}
+{#                      <strong>{{ order.cart_history.total_sum }}₽</strong>#}
+{#                    </div>#}
+{#                    <div class="col-md-3">#}
+{#                      <small class="text-muted">{{ order.cart_history.quantity }} товара</small>#}
+{#                    </div>#}
+{#                    <div class="col-md-2">#}
+{#                      <button class="btn btn-outline-accent btn-sm" data-bs-toggle="collapse"#}
+{#                              data-bs-target="#order1234">#}
+{#                        Подробнее#}
+{#                      </button>#}
+{#                    </div>#}
+{#                  </div>#}
+{#                  <div class="collapse mt-3" id="order1234">#}
+{#                    <hr>#}
+{#                    <div class="row">#}
+{#                      <div class="col-md-8">#}
+{#                        <h6>Состав заказа:</h6>#}
+{#                        <ul class="list-unstyled">#}
+{#                          {% for item in order.cart_history.items %}#}
+{#                            <li>• {{ item.product_name }} - {{ item.quantity }} шт.</li>#}
+{#                          {% endfor %}#}
+{#                        </ul>#}
+{#                      </div>#}
+{#                      <div class="col-md-4">#}
+{#                        <h6>Доставка:</h6>#}
+{#                        <p class="small">{{ order.address }}</p>#}
+{#                      </div>#}
+{#                    </div>#}
+{#                  </div>#}
+{#                </div>#}
+{#                {% endfor %}#}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

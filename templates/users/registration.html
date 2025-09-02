@@ -1,0 +1,91 @@
+{% extends "users/base_users.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center min-vh-100 align-items-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow">
+          <div class="card-body p-5">
+            <!-- Logo -->
+            <div class="text-center mb-4">
+              <a href="{% url 'main:home' %}" class="text-decoration-none">
+                <h2 class="fw-bold text-primary">HeyHockey!</h2>
+              </a>
+              <p class="text-muted">Создайте аккаунт для удобных покупок</p>
+            </div>
+            
+            {% if form.errors %}
+              <div class="container d-flex align-items-center justify-content-center">
+                  <div class="alert alert-warning alert-dismissible fade show " role="alert">
+                    {% for value in form.errors.values %}
+                      <strong>{{ value }}</strong>
+                    {% endfor %}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              </div>
+            {% endif %}
+
+            <!-- Registration Form -->
+            <form id="registrationForm" action="{% url 'users:registration' %}" method="post">
+              {% csrf_token %}
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label class="form-label">Имя *</label>
+                    {{form.first_name}}
+                  <div class="invalid-feedback">Введите имя</div>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label">Фамилия *</label>
+                  {{form.last_name}}
+                  <div class="invalid-feedback">Введите фамилию</div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Email *</label>
+                {{form.email}}
+                <div class="invalid-feedback">Введите корректный email</div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Логин *</label>
+                {{form.username}}
+                <div class="invalid-feedback">Введите номер телефона</div>
+              </div>
+
+
+              <div class="mb-3">
+                <label class="form-label">Пароль *</label>
+                <div class="position-relative">
+                  {{form.password1}}
+
+                </div>
+                <div class="form-text">Минимум 8 символов, включая цифры и буквы</div>
+                <div class="invalid-feedback">Пароль должен содержать минимум 8 символов</div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Подтвердите пароль *</label>
+                {{form.password2}}
+                <div class="invalid-feedback">Пароли не совпадают</div>
+              </div>
+
+
+              <button type="submit" class="btn btn-primary w-100 mb-3">
+                <i class="fas fa-user-plus me-2"></i>Создать аккаунт
+              </button>
+            </form>
+
+            <!-- Login Link -->
+            <div class="text-center mt-4">
+              <span class="text-muted">Уже есть аккаунт? </span>
+              <a href="{% url 'users:login' %}" class="text-primary text-decoration-none">Войти</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
