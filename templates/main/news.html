@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container py-5 mt-5 min-vh-100">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        {% for one_news in news %}
+          <div class="row g-0 border rounded overflow-hidden shadow-sm mb-4">
+
+            <div class="col-12 col-md-4">
+              <img src="{{ one_news.image.url }}" alt="{{ one_news.name }}"
+                   class="img-fluid w-100 h-100 object-fit-cover">
+            </div>
+                      
+            <div class="col-12 col-md-8">
+              <div class="p-4 h-100 d-flex flex-column">
+                <h4 class="mb-3">{{ one_news.name }}</h4>
+                <p class="mb-4 flex-grow-1">{{ one_news.description }}</p>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="text-center py-5">
+            <h1 class="display-6">Здесь пока пусто...</h1>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

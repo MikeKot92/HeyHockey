@@ -1,3 +1,13 @@
 from django.contrib import admin
 
-# Register your models here.
+from main.models import Info, News
+
+
+@admin.register(Info)
+class InfoAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+
+
+
+
+admin.site.register(News)
