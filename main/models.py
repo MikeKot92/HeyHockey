@@ -1,5 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class Info(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
@@ -19,6 +21,7 @@ class News(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
     image = models.ImageField(upload_to='news/', verbose_name='Изображение')
     description = models.TextField(verbose_name='Содержание', blank=True, null=True, )
+    created_at = models.DateField(auto_now_add=True, verbose_name='Дата публикации')
 
     class Meta:
         db_table = 'news'
@@ -28,3 +31,20 @@ class News(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Review(models.Model):
+    STATUS_CHOICES = (('Модерация','Модерация'),('Опубликован','Опубликован'),)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    text = models.TextField(verbose_name='Отзыв')
+    rating = models.IntegerField(verbose_name='Рейтинг')
+    status = models.CharField(max_length=100, default='Модерация', choices=STATUS_CHOICES, verbose_name='Статус')
+    created_at = models.DateField(auto_now_add=True, verbose_name='Дата создания' )
+
+    class Meta:
+        db_table = 'review'
+        verbose_name = 'Отзывы'
+        verbose_name_plural = 'Отзывы'
+
+    def __str__(self):
+        return f'{self.user} | {self.rating}'

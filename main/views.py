@@ -1,6 +1,8 @@
 from django.views.generic import TemplateView, DetailView
 from common.mixins import TitleMixin
-from main.models import Info, News
+from main.models import Info, News, Review
+from django.contrib import messages
+from django.shortcuts import redirect
 
 
 class IndexTemplateView(TitleMixin, TemplateView):
@@ -12,7 +14,7 @@ class NewsTemplateView(TitleMixin, TemplateView):
     title = 'News'
     template_name = 'main/news.html'
     extra_context = {
-        'news': News.objects.all()
+        'news': News.objects.all().order_by('-id')
     }
 
 
@@ -22,3 +24,23 @@ class InfoDetailView(TitleMixin, DetailView):
     template_name = 'main/info.html'
     context_object_name = 'info'
     slug_url_kwarg = 'info_slug'
+
+class ReviewTemplateView(TitleMixin, TemplateView):
+    title = 'Review'
+    model = Review
+    template_name = 'main/review.html'
+    success_message = "Ваш отзыв будет опубликован после модерации!"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['review_pub_all'] = Review.objects.filter(status='Опубликован').order_by('-id').select_related('user')
+        return context
+
+    def post(self, request, *args, **kwargs):
+        print(kwargs)
+        rating = request.POST.get('rating')
+        text = request.POST.get('text')
+        user_id = request.user.id
+        Review.objects.create(user_id=user_id, text=text, rating=rating)
+        messages.success(request, "Ваш отзыв будет опубликован после модерации!")
+        return redirect('main:review')

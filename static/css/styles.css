@@ -32,6 +32,53 @@ body {
     transform: translateY(0); /* Перемещаем вниз */
 }
 
+/* Стили для звездного рейтинга */
+.star-rating {
+    direction: rtl;
+    text-align: left;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label {
+    color: #ddd;
+    font-size: 2rem;
+    padding: 0 0.1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    user-select: none;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input[type="radio"]:checked ~ label {
+    color: #ffc107;
+}
+
+/* Стили для отображения звезд в отзывах */
+.stars-display .star {
+    color: #ddd;
+    font-size: 1.2rem;
+}
+
+.stars-display .star.filled {
+    color: #ffc107;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 576px) {
+    .star-rating label {
+        font-size: 1.5rem;
+        padding: 0;
+    }
+
+    .stars-display .star {
+        font-size: 1rem;
+    }
+}
+
 /* Navigation */
 .navbar-brand {
     font-size: 1.5rem;

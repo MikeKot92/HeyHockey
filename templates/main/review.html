@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container py-5 mt-5 min-vh-100">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+
+        {% if not user.is_authenticated %}
+          <p>Чтобы оставить отзыв необходимо <a href="{% url 'users:login' %}">авторизоваться</a></p>
+        {% else %}
+          <!-- Форма добавления отзыва -->
+          <div class="card shadow-sm mb-5">
+            <div class="card-header bg-primary text-white">
+              <h3 class="mb-0">Оставьте отзыв</h3>
+            </div>
+            <div class="card-body">
+              <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="text" class="form-label">Отзыв</label>
+                  <textarea class="form-control" id="text" name="text" rows="4" required></textarea>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label">Оценка</label>
+                  <div class="star-rating">
+                    <div class="stars">
+                      {% for i in "54321" %}
+                        <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" required>
+                        <label for="star{{ i }}" class="star">&#9733;</label>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                  <i class="fas fa-paper-plane me-2"></i>Отправить
+                </button>
+              </form>
+            </div>
+          </div>
+        {% endif %}
+        <!-- Отзывы -->
+        <div class="reviews-list">
+          {% for review in review_pub_all %}
+            <div class="card mb-4 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                  <h5 class="card-title mb-0">{{ review.user.username }}</h5>
+                  <div class="stars-display">
+                    <!-- Отображение звезд рейтинга -->
+                    {% for i in "12345" %}
+                      {% if i|add:0 <= review.rating %}
+                        <span class="star filled">&#9733;</span>
+                      {% else %}
+                        <span class="star">&#9733;</span>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+                <p class="card-text">{{ review.text }}</p>
+                <small class="text-muted">{{ review.created_at|date:"SHORT_DATE_FORMAT" }}</small>
+              </div>
+            </div>
+          {% empty %}
+            <div class="text-center py-5">
+              <h4>Пока нет опубликованных отзывов</h4>
+              <p class="text-muted">Будьте первым, кто оставит отзыв!</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
