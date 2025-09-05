@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>{{ product.name }}</title>
+{% endblock %}
+
+{% block content %}
+  <div class="container py-5 mt-5">
+    <div class="row">
+      <!-- Product Images -->
+      <div class="col-lg-6 mb-4">
+        <div class="product-images">
+          <div class="main-image mb-3 position-relative">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}" id="mainImage">
+            {% else %}
+              <div class="d-flex align-items-center justify-content-center bg-light"
+                   style="height: 450px; width: 100%;">
+                <div class="text-center">
+                  <i class="fas fa-image fa-3x text-muted mb-3"></i>
+                  <p class="text-muted">Изображение отсутствует</p>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+          <div class="row">
+            {% if product.image %}
+              <div class="col-3">
+                <img src="{{ product.image.url }}" class="img-fluid rounded thumbnail-image active"
+                     alt="{{ product.name }}" onclick="changeImage(this)">
+              </div>
+            {% endif %}
+
+            {% for image in product.images.all %}
+              <div class="col-3">
+                <img src="{{ image.image.url }}"
+                     class="img-fluid rounded thumbnail-image {% if forloop.first and not product.image %}active{% endif %}"
+                     alt="{{ product.name }}" onclick="changeImage(this)">
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="col-lg-6">
+        <div class="product-info">
+          <!-- Product Title -->
+          <h1 class="product-title mb-3">{{ product.name }}</h1>
+
+          <!-- Price -->
+          <div class="product-price mb-4">
+            <span class="current-price h3 text-primary fw-bold">{{ product.sell_price }}₽</span>
+            {% if product.discount > 0 %}
+              <span class="old-price text-muted text-decoration-line-through ms-2">{{ product.price }}₽</span>
+              <span class="discount-badge badge bg-warning ms-2">-{{ product.discount }}%</span>
+            {% endif %}
+          </div>
+
+
+          <!-- Product Features -->
+          <div class="product-features mb-4">
+            <ul class="list-unstyled">
+              <li><strong>Команда:</strong> {{ product.team.name }}</li>
+              <li><strong>Лига:</strong> {{ product.team.league.name }}</li>
+              <li><strong>Категория:</strong> {{ product.category.name }}</li>
+              <li>
+                <strong>Статус:</strong>
+                {% if status %}
+                  <span class="availability-true text-center text-success">	&bull;  В наличии</span>
+                {% else %}
+                  <span class="availability-false text-center text-danger">	&bull;  Нет в наличии</span>
+                {% endif %}
+              </li>
+            </ul>
+          </div>
+
+          <!-- Size Selection -->
+          <div class="size-selection mb-4">
+
+            {% if status %}
+              {% if sizes %}
+                <h6>Размер:</h6>
+                <div class="size-options">
+                  {% for size in sizes %}
+                    <input type="radio" class="btn-check" name="size" id="size-{{ size }}" value="{{ size }}">
+                    <label class="btn btn-outline-primary" for="size-{{ size }}">{{ size }}</label>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            
+            {% else %}
+              <strong>
+                &bull; В данный момент этого товара нет в наличии,
+                срок доставки можно уточнить у менеджера.
+              </strong>
+
+            {% endif %}
+
+            {% if product.category.table_size %}
+              <small class="text-muted d-block mt-2">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
+                  <i class="fas fa-ruler me-1"></i>Таблица размеров
+                </a>
+              </small>
+            {% endif %}
+          </div>
+
+          <!-- Quantity -->
+          <div class="quantity-selection mb-4">
+            <h6>Количество:</h6>
+            <div class="input-group" style="max-width: 150px;">
+              <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity()">-</button>
+              <input type="text" class="form-control text-center" value="1" id="quantity" readonly>
+              <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity()">+</button>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="product-actions mb-4">
+            <div class="d-grid gap-2 d-md-flex">
+              <button class="btn btn-primary btn-lg flex-fill" onclick="addToCart({{ product.id }})">
+                <i class="fas fa-cart-plus me-2"></i>Добавить в корзину
+              </button>
+            </div>
+            <button class="btn btn-outline-danger btn-lg w-100 mt-2" onclick="toggleWishlist({{ product.id }})">
+              <i class="far fa-heart me-2"></i>В избранное
+            </button>
+
+          </div>
+
+          <!-- Delivery Info -->
+          <div class="delivery-info">
+            <div class="card">
+              <div class="card-body">
+                <h6 class="card-title">
+                  <i class="fas fa-truck text-primary me-2"></i>Доставка и оплата
+                </h6>
+                <ul class="list-unstyled mb-0 small">
+                  <li class="mb-2">
+                    <i class="fas fa-check text-success me-2"></i>
+                    Бесплатная доставка от 5000₽
+                  </li>
+                  <li class="mb-2">
+                    <i class="fas fa-check text-success me-2"></i>
+                    Доставка по Москве за 1 день
+                  </li>
+                  <li class="mb-2">
+                    <i class="fas fa-check text-success me-2"></i>
+                    Возврат в течение 14 дней
+                  </li>
+                  <li>
+                    <i class="fas fa-check text-success me-2"></i>
+                    Оплата при получении
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Tabs -->
+    <div class="container mt-5">
+      <!-- Навигационная панель табов -->
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active text-dark" id="description-tab" data-bs-toggle="tab"
+                  data-bs-target="#description" type="button" role="tab" aria-controls="description"
+                  aria-selected="true">Описание товара
+          </button>
+        </li>
+        {% if product.video_src %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link text-dark" id="video-tab" data-bs-toggle="tab" data-bs-target="#video" type="button"
+                    role="tab" aria-controls="video" aria-selected="false">Видеообзор
+            </button>
+          </li>
+        {% endif %}
+        <li class="nav-item" role="presentation">
+          <button class="nav-link text-dark" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button"
+                  role="tab" aria-controls="info" aria-selected="false">Информация
+          </button>
+        </li>
+      </ul>
+
+      <!-- Контент табов -->
+      <div class="tab-content mt-3 mb-5" id="myTabContent">
+        <!-- Вкладка "Описание товара" -->
+        <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+          <div class="px-4 py-3">
+            <p>{{ product.description|default:"Описание отсутствует" }}</p>
+
+
+          </div>
+        </div>
+
+        <!-- Вкладка "Видеообзор" -->
+        {% if product.video_src %}
+          <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
+            <div class="videoobzor p-4">
+              <div class="ratio ratio-16x9">
+                <iframe src="{{ product.video_src }}"
+                        allow="encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                        frameborder="0"
+                        allowfullscreen
+                        style="border: 2px solid #df0da8;border-radius: 30px;box-shadow: -15px 15px 20px 0px rgba(0,195,179,0.6);">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+
+        <!-- Вкладка "Информация" -->
+        <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
+          <div class="p-4">
+            <ul class="list-unstyled">
+              <li class="mb-2"><strong>Производитель:</strong> Китай</li>
+              <li class="mb-2"><strong>Доставка:</strong> 500р.</li>
+              <li class="mb-2"><strong>Оплата:</strong> Онлайн</li>
+              <li class="mb-2"><strong>Гарантия:</strong> 3 мес.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    {% if recommendation %}
+      <div class="row mt-5">
+        <div class="col-12">
+          <h4 class="mb-4">Похожие товары</h4>
+        </div>
+      </div>
+      <div class="row g-4">
+        {% for related_product in recommendation %}
+          <div class="col-lg-3 col-md-6">
+            <div class="card product-card h-100 border-0 shadow-sm">
+              {% if related_product.image %}
+                <img src="{{ related_product.image.url }}" class="card-img-top" alt="{{ related_product.name }}"
+                     style="height: 250px; object-fit: cover;">
+              {% else %}
+                <img src="{% static 'images/no_image.png' %}" class="card-img-top" alt="{{ related_product.name }}"
+                     style="height: 250px; object-fit: cover;">
+              {% endif %}
+              <div class="card-body">
+                <h6 class="card-title">{{ related_product.name }}</h6>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fw-bold text-primary">{{ related_product.sell_price }}₽</span>
+                  <div class="rating">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="far fa-star text-warning"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-transparent border-0">
+                <a href="{{ related_product.get_absolute_url }}" class="btn btn-primary w-100">
+                  <i class="fas fa-eye me-2"></i>Подробнее
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Size Guide Modal -->
+  {% if product.category.table_size %}
+    <div class="modal fade" id="sizeGuideModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Таблица размеров</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body text-center">
+            <img src="{{ product.category.table_size.url }}" class="img-fluid" alt="Таблица размеров">
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+
+{% endblock %}

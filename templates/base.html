@@ -1,5 +1,6 @@
 {% load static %}
 {% load main_tags %}
+{% load goods_tags %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -28,17 +29,22 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
+        
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-            Категории
+            Команды
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="catalog.html?category=fitness">Фитнес</a></li>
-            <li><a class="dropdown-item" href="catalog.html?category=running">Бег</a></li>
-            <li><a class="dropdown-item" href="catalog.html?category=gym">Тренажерный зал</a></li>
-            <li><a class="dropdown-item" href="catalog.html?category=outdoor">Активный отдых</a></li>
+            {% tag_teams as data %}
+            {% for league in data.league %}
+              <li><strong class="dropdown-item fw-bold">{{ league }}</strong></li>
+              {% for team in league.team_set.all %}
+              <li><a class="dropdown-item" href="{% url 'goods:index' team.slug %}">{{ team }}</a></li>
+              {% endfor %}
+            {% endfor %}
           </ul>
         </li>
+      
         <li class="nav-item dropdown">
           <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
              aria-expanded="false">
@@ -61,8 +67,8 @@
         </li>
       </ul>
       <div class="d-flex align-items-center">
-        <form class="d-flex me-3">
-          <input class="form-control me-2" type="search" placeholder="Поиск товаров...">
+        <form class="d-flex me-3" action="{% url 'goods:search' %}" role="search" method="get">
+          <input class="form-control me-2" type="search" placeholder="Поиск товаров..." name="q">
           <button class="btn btn-outline-light" type="submit">
             <i class="fas fa-search"></i>
           </button>
