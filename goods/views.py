@@ -13,7 +13,8 @@ class ProductListView(TitleMixin, ListView):
     model = Product
     template_name = 'goods/catalog.html'
     context_object_name = 'products'
-    paginate_by = 3
+    paginate_by = 2
+    ordering = ['-id']
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -43,8 +44,6 @@ class ProductListView(TitleMixin, ListView):
 
         if size:
             products = products.filter(productsize__size_id=size, productsize__availability=True).distinct()
-
-        products = products.prefetch_related('images')
 
         return products
 

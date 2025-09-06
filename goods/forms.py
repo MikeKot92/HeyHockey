@@ -11,7 +11,6 @@ from goods.models import Categories, Size
 
 
 class FilterForm(forms.Form):
-    # Существующие поля
     SORT_CHOICES = (
         ('default', 'по умолчанию'),
         ('price', 'по возрастанию'),
@@ -37,8 +36,6 @@ class FilterForm(forms.Form):
         label='Категории'
     )
 
-
-    # Размеры
     size = forms.ModelMultipleChoiceField(
         queryset=Size.objects.all(),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),

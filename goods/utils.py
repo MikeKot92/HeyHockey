@@ -10,7 +10,6 @@ def q_search(query):
     for token in keyword:
         q_objects |= Q(description__icontains=token)
         q_objects |= Q(description__icontains=token.title())
-
         q_objects |= Q(name__icontains=token)
         q_objects |= Q(name__icontains=token.title())
     return Product.objects.filter(q_objects)

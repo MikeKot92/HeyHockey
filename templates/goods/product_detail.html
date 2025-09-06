@@ -11,24 +11,29 @@
       <!-- Product Images -->
       <div class="col-lg-6 mb-4">
         <div class="product-images">
-          <div class="main-image mb-3 position-relative">
+          <!-- Основное изображение -->
+          <div class="main-image mb-3 position-relative" style="height: 450px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
             {% if product.image %}
-              <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}" id="mainImage">
+              <img src="{{ product.image.url }}" class="img-fluid h-100 w-100 object-fit-cover" alt="{{ product.name }}" id="mainImage" style="object-fit: cover;">
             {% else %}
-              <div class="d-flex align-items-center justify-content-center bg-light"
-                   style="height: 450px; width: 100%;">
+              <div class="d-flex align-items-center justify-content-center bg-light h-100 w-100">
                 <div class="text-center">
                   <i class="fas fa-image fa-3x text-muted mb-3"></i>
                   <p class="text-muted">Изображение отсутствует</p>
                 </div>
               </div>
             {% endif %}
+            {% if product.discount > 0 %}
+              <span class="badge bg-warning position-absolute top-0 end-0 m-3">-{{ product.discount }}%</span>
+            {% endif %}
           </div>
+          
+          <!-- Миниатюры -->
           <div class="row">
             {% if product.image %}
               <div class="col-3">
                 <img src="{{ product.image.url }}" class="img-fluid rounded thumbnail-image active"
-                     alt="{{ product.name }}" onclick="changeImage(this)">
+                     alt="{{ product.name }}" onclick="changeImage(this)" style="height: 100px; object-fit: cover; cursor: pointer;">
               </div>
             {% endif %}
 
@@ -36,7 +41,7 @@
               <div class="col-3">
                 <img src="{{ image.image.url }}"
                      class="img-fluid rounded thumbnail-image {% if forloop.first and not product.image %}active{% endif %}"
-                     alt="{{ product.name }}" onclick="changeImage(this)">
+                     alt="{{ product.name }}" onclick="changeImage(this)" style="height: 100px; object-fit: cover; cursor: pointer;">
               </div>
             {% endfor %}
           </div>
@@ -54,10 +59,8 @@
             <span class="current-price h3 text-primary fw-bold">{{ product.sell_price }}₽</span>
             {% if product.discount > 0 %}
               <span class="old-price text-muted text-decoration-line-through ms-2">{{ product.price }}₽</span>
-              <span class="discount-badge badge bg-warning ms-2">-{{ product.discount }}%</span>
             {% endif %}
           </div>
-
 
           <!-- Product Features -->
           <div class="product-features mb-4">
@@ -68,9 +71,9 @@
               <li>
                 <strong>Статус:</strong>
                 {% if status %}
-                  <span class="availability-true text-center text-success">	&bull;  В наличии</span>
+                  <span class="availability-true text-center text-success">&bull; В наличии</span>
                 {% else %}
-                  <span class="availability-false text-center text-danger">	&bull;  Нет в наличии</span>
+                  <span class="availability-false text-center text-danger">&bull; Нет в наличии</span>
                 {% endif %}
               </li>
             </ul>
@@ -78,26 +81,6 @@
 
           <!-- Size Selection -->
           <div class="size-selection mb-4">
-
-            {% if status %}
-              {% if sizes %}
-                <h6>Размер:</h6>
-                <div class="size-options">
-                  {% for size in sizes %}
-                    <input type="radio" class="btn-check" name="size" id="size-{{ size }}" value="{{ size }}">
-                    <label class="btn btn-outline-primary" for="size-{{ size }}">{{ size }}</label>
-                  {% endfor %}
-                </div>
-              {% endif %}
-            
-            {% else %}
-              <strong>
-                &bull; В данный момент этого товара нет в наличии,
-                срок доставки можно уточнить у менеджера.
-              </strong>
-
-            {% endif %}
-
             {% if product.category.table_size %}
               <small class="text-muted d-block mt-2">
                 <a href="#" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
@@ -105,30 +88,40 @@
                 </a>
               </small>
             {% endif %}
-          </div>
 
-          <!-- Quantity -->
-          <div class="quantity-selection mb-4">
-            <h6>Количество:</h6>
-            <div class="input-group" style="max-width: 150px;">
-              <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity()">-</button>
-              <input type="text" class="form-control text-center" value="1" id="quantity" readonly>
-              <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity()">+</button>
-            </div>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="product-actions mb-4">
-            <div class="d-grid gap-2 d-md-flex">
-              <button class="btn btn-primary btn-lg flex-fill" onclick="addToCart({{ product.id }})">
+          {% if status %}
+            <form action="{% url 'cart:cart_add' product.id %}" method="post" class="d-flex flex-column mb-2">
+              {% csrf_token %}
+              
+              {% if 'Б/р' in sizes %}
+                <input type="hidden" name="size" value="Б/р">
+              {% else %}
+                <div class="mb-3">
+                  <strong>Размеры:</strong>
+                </div>
+                <div class="size-options mb-3">
+                  {% for size in sizes %}
+                    <input type="radio" class="btn-check" name="size" id="size-{{ size }}" value="{{ size }}" required>
+                    <label class="btn btn-outline-primary" for="size-{{ size }}">{{ size }}</label>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              
+              <button type="submit" class="btn btn-success btn-lg flex-fill">
                 <i class="fas fa-cart-plus me-2"></i>Добавить в корзину
               </button>
-            </div>
-            <button class="btn btn-outline-danger btn-lg w-100 mt-2" onclick="toggleWishlist({{ product.id }})">
-              <i class="far fa-heart me-2"></i>В избранное
-            </button>
-
+            </form>
+          {% else %}
+            <strong>
+              &bull; В данный момент этого товара нет в наличии,
+              срок доставки можно уточнить у менеджера.
+            </strong>
+          {% endif %}
           </div>
+
+          <button class="btn btn-outline-danger btn-lg w-100 mb-3" onclick="toggleWishlist({{ product.id }})">
+            <i class="far fa-heart me-2"></i>В избранное
+          </button>
 
           <!-- Delivery Info -->
           <div class="delivery-info">
@@ -192,8 +185,6 @@
         <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
           <div class="px-4 py-3">
             <p>{{ product.description|default:"Описание отсутствует" }}</p>
-
-
           </div>
         </div>
 
@@ -212,7 +203,6 @@
             </div>
           </div>
         {% endif %}
-
 
         <!-- Вкладка "Информация" -->
         <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
@@ -288,5 +278,26 @@
     </div>
   {% endif %}
 
+  <script>
+  function changeImage(element) {
+    document.getElementById('mainImage').src = element.src;
+    document.querySelectorAll('.thumbnail-image').forEach(img => img.classList.remove('active'));
+    element.classList.add('active');
+  }
 
+  function toggleWishlist(productId) {
+    // Здесь будет логика добавления в избранное
+    const button = event.target.closest('button');
+    button.classList.toggle('btn-danger');
+    button.classList.toggle('btn-outline-danger');
+    const heartIcon = button.querySelector('i');
+    if (heartIcon.classList.contains('far')) {
+      heartIcon.classList.remove('far');
+      heartIcon.classList.add('fas');
+    } else {
+      heartIcon.classList.remove('fas');
+      heartIcon.classList.add('far');
+    }
+  }
+  </script>
 {% endblock %}
