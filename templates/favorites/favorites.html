@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container py-5 mt-5 min-vh-100">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8">
+        <h6 class="display-6 fw-bold text-center mb-4 text-secondary">Избранное</h6>
+        <hr class="w-25 mx-auto mb-5 text-primary">
+
+        <div class="row g-4" id="products-grid">
+          {% for product in favorites %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+              {% include 'favorites/components/favorites_card.html' %}
+            </div>
+          {% empty %}
+            <h1 class="display-6">Здесь пока пусто...</h1>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}

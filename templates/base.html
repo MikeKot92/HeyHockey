@@ -29,7 +29,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-        
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
             Команды
@@ -39,12 +39,17 @@
             {% for league in data.league %}
               <li><strong class="dropdown-item fw-bold">{{ league }}</strong></li>
               {% for team in league.team_set.all %}
-              <li><a class="dropdown-item" href="{% url 'goods:index' team.slug %}">{{ team }}</a></li>
+                <li><a class="dropdown-item" href="{% url 'goods:index' team.slug %}">{{ team }}</a></li>
               {% endfor %}
             {% endfor %}
+            <li>
+              <a class="dropdown-item" href="{% url 'goods:index' 'all' %}">
+                <strong>ВСЕ КОМАНДЫ</strong>
+              </a>
+            </li>
           </ul>
         </li>
-      
+
         <li class="nav-item dropdown">
           <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
              aria-expanded="false">
@@ -79,7 +84,12 @@
                             {{ carts.get_total_quantity }}
                         </span>
         </a>
-      
+
+        <a href="{% url 'favorites:view_favorites' %}" class="btn btn-outline-light position-relative me-2">
+          <i class="fas fa-heart"></i>
+
+        </a>
+
         {% if user.is_authenticated %}
           <a href="{% url 'users:profile' %}" class="btn btn-outline-light position-relative me-2">
             <i class="fas fa-user"></i>
@@ -89,7 +99,7 @@
             <i class="fas fa-sign-in-alt me-2"></i>
           </a>
         {% endif %}
-      
+
       </div>
     </div>
   </div>

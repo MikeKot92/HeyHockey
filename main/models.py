@@ -5,7 +5,7 @@ User = get_user_model()
 
 class Info(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
-    description = models.TextField(verbose_name='Содержание', blank=True, null=True, )
+    description = models.TextField( blank=True, null=True, verbose_name='Содержание')
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
 
     class Meta:
@@ -20,7 +20,7 @@ class Info(models.Model):
 class News(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
     image = models.ImageField(upload_to='news/', verbose_name='Изображение')
-    description = models.TextField(verbose_name='Содержание', blank=True, null=True, )
+    description = models.TextField( blank=True, null=True, verbose_name='Содержание',)
     created_at = models.DateField(auto_now_add=True, verbose_name='Дата публикации')
 
     class Meta:

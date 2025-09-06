@@ -13,9 +13,11 @@ class IndexTemplateView(TitleMixin, TemplateView):
 class NewsTemplateView(TitleMixin, TemplateView):
     title = 'News'
     template_name = 'main/news.html'
-    extra_context = {
-        'news': News.objects.all().order_by('-id')
-    }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['news'] = News.objects.all().order_by('-id')
+        return context
 
 
 class InfoDetailView(TitleMixin, DetailView):
