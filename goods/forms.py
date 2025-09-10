@@ -37,7 +37,7 @@ class FilterForm(forms.Form):
     )
 
     size = forms.ModelMultipleChoiceField(
-        queryset=Size.objects.all(),
+        queryset=Size.objects.all().exclude(name='Б/р'),
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
         required=False,
         label='Размеры'

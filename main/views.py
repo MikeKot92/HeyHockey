@@ -1,8 +1,12 @@
+from django.db.models import Sum
 from django.views.generic import TemplateView, DetailView
 from common.mixins import TitleMixin
+from goods.models import Product
 from main.models import Info, News, Review
 from django.contrib import messages
 from django.shortcuts import redirect
+
+from orders.models import OrderItem
 
 
 class IndexTemplateView(TitleMixin, TemplateView):

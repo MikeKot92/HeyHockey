@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+  <!-- Checkout Form -->
+  <div class="container py-4 mt-5">
+    <div class="row">
+      <!-- Order Form -->
+      <div class="col-lg-8 ">
+        <form action="{% url 'orders:create_orders' %}" id="checkoutForm" method="post" novalidate>
+          {% csrf_token %}
+
+          <!-- Contact Information -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Контактная информация</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }}
+                    *</label>
+                  {{ form.first_name }}
+                  {% if form.first_name.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ form.first_name.errors }}
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }} *</label>
+                  {{ form.last_name }}
+                  {% if form.last_name.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ form.last_name.errors }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }} *</label>
+                  {{ form.email }}
+                  {% if form.email.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ form.email.errors }}
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="{{ form.phone.id_for_label }}" class="form-label">{{ form.phone.label }} *</label>
+                  {{ form.phone }}
+                  {% if form.phone.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ form.phone.errors }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delivery Information -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Доставка</h5>
+            </div>
+            <div class="card-body">
+              <!-- Delivery Method -->
+              <div class="mb-4">
+                <h6>{{ form.delivery_method.label }}</h6>
+                <!-- Самовывоз выбран по умолчанию -->
+                <div class="form-check mb-2">
+                  {{ form.delivery_method.0.tag }}
+                  <label class="form-check-label" for="{{ form.delivery_method.0.id_for_label }}">
+                    <strong>{{ form.delivery_method.0.choice_label }}</strong> - Бесплатно
+                    <br><small class="text-muted">Забрать по адресу: Москва, ул. Спортивная, 123</small>
+                  </label>
+                </div>
+                <div class="form-check mb-2">
+                  {{ form.delivery_method.1.tag }}
+                  <label class="form-check-label" for="{{ form.delivery_method.1.id_for_label }}">
+                    <strong>{{ form.delivery_method.1.choice_label }}</strong> - 500₽
+                    <br><small class="text-muted">Доставка в течение 1-2 дней</small>
+                  </label>
+                </div>
+                {% if form.delivery_method.errors %}
+                  <div class="invalid-feedback d-block">
+                    {{ form.delivery_method.errors }}
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Delivery Address - скрыт по умолчанию -->
+              <div id="deliveryAddress" style="display: none;">
+                <h6>Адрес доставки</h6>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="{{ form.city.id_for_label }}" class="form-label">{{ form.city.label }} *</label>
+                    {{ form.city }}
+                    {% if form.city.errors %}
+                      <div class="invalid-feedback d-block">
+                        {{ form.city.errors }}
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="{{ form.street.id_for_label }}" class="form-label">{{ form.street.label }} *</label>
+                    {{ form.street }}
+                    {% if form.street.errors %}
+                      <div class="invalid-feedback d-block">
+                        {{ form.street.errors }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="{{ form.house.id_for_label }}" class="form-label">{{ form.house.label }} *</label>
+                    {{ form.house }}
+                    {% if form.house.errors %}
+                      <div class="invalid-feedback d-block">
+                        {{ form.house.errors }}
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="{{ form.apartment.id_for_label }}" class="form-label">{{ form.apartment.label }}</label>
+                    {{ form.apartment }}
+                    {% if form.apartment.errors %}
+                      <div class="invalid-feedback d-block">
+                        {{ form.apartment.errors }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Способ оплаты</h5>
+            </div>
+            <div class="card-body">
+              <div class="form-check mb-2">
+                {{ form.payment_method.0.tag }}
+                <label class="form-check-label" for="{{ form.payment_method.0.id_for_label }}">
+                  <i class="fas fa-credit-card me-2"></i>
+                  <strong>{{ form.payment_method.0.choice_label }}</strong> (банковской картой)
+                  <br><small class="text-muted">Visa, MasterCard, МИР</small>
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                {{ form.payment_method.1.tag }}
+                <label class="form-check-label" for="{{ form.payment_method.1.id_for_label }}">
+                  <i class="fas fa-money-bill me-2"></i>
+                  <strong>{{ form.payment_method.1.choice_label }}</strong> (наличными или картой)
+                  <br><small class="text-muted">Оплата курьеру</small>
+                </label>
+              </div>
+              {% if form.payment_method.errors %}
+                <div class="invalid-feedback d-block">
+                  {{ form.payment_method.errors }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Комментарий к заказу</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="{{ form.comment.id_for_label }}" class="form-label">{{ form.comment.label }}</label>
+                {{ form.comment }}
+                {% if form.comment.errors %}
+                  <div class="invalid-feedback d-block">
+                    {{ form.comment.errors }}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Кнопка отправки формы перемещена внутрь формы -->
+          <button type="submit" class="btn btn-primary w-100 btn-lg mb-3">
+            Оформить заказ
+          </button>
+
+        </form>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="col-lg-4 ">
+        <div class="card sticky-top">
+          <div class="card-header">
+            <h5 class="mb-0">Ваш заказ</h5>
+          </div>
+          <div class="card-body">
+            <!-- Order Items -->
+            {% for cart in carts %}
+              <div class="order-item mb-3">
+                <div class="d-flex align-items-center">
+                  <div class="col-md-2">
+                    <img src="{{ cart.product.image.url }}?height=60&width=60" class="img-fluid rounded"
+                         alt="{{ cart.product.name }}">
+                  </div>
+                  <div class="col-md-6">
+                    <h6 class="mb-1 small">{{ cart.product.name }}</h6>
+                    <p class="text-muted small mb-0">Размер: {{ cart.size }}, Кол-во: {{ cart.quantity }}</p>
+                  </div>
+                  <div class="col-md-4 text-end">
+                    {% if cart.price_without_discount != cart.total_price %}
+                      <span class="text-muted text-decoration-line-through small">{{ cart.price_without_discount }} ₽</span>
+                    {% endif %}
+                    <p class="fw-bold text-primary">{{ cart.total_price }} ₽</p>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+
+            <hr>
+
+            <!-- Order Total -->
+            <div class="d-flex justify-content-between mb-2">
+              <span>Товары ({{ carts.get_total_quantity }} шт.)</span>
+              <span>{{ carts.get_total_price }} ₽</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2" id="deliveryCost">
+              <span>Доставка:</span>
+              <span class="text-success">Бесплатно</span> <!-- Изначально бесплатная доставка -->
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between mb-4">
+              <strong>Итого к оплате</strong>
+              <!-- Итоговая сумма инициализируется базовой ценой -->
+              <strong class="text-accent" id="totalAmount">{{ carts.get_total_price }}₽</strong>
+            </div>
+
+            <!-- Кнопка отправки формы вне формы удалена -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // --- Логика для показа/скрытия адреса и обновления стоимости ---
+      const deliveryMethodRadios = document.querySelectorAll('input[name="delivery_method"]');
+      const deliveryAddressDiv = document.getElementById('deliveryAddress');
+      const deliveryCostElement = document.getElementById('deliveryCost');
+      const totalAmountElement = document.getElementById('totalAmount');
+      const baseTotalText = "{{ carts.get_total_price }}";
+      // Очистка от символа ₽ для вычислений
+      const baseTotal = parseFloat(baseTotalText.replace(/[^\d,.]/g, '').replace(',', '.')) || 0;
+
+      function updateDeliveryAndTotal(selectedMethod) {
+        if (selectedMethod === 'pickup') {
+          deliveryCostElement.innerHTML = '<span>Доставка</span><span class="text-success">Бесплатно</span>';
+          totalAmountElement.textContent = baseTotal.toLocaleString('ru-RU', { minimumFractionDigits: 2 }) + ' ₽';
+        } else if (selectedMethod === 'courier') {
+          const deliveryCost = 500;
+          deliveryCostElement.innerHTML = '<span>Доставка</span><span>' + deliveryCost.toLocaleString('ru-RU', { minimumFractionDigits: 2 }) + ' ₽</span>';
+          const newTotal = baseTotal + deliveryCost;
+          totalAmountElement.textContent = newTotal.toLocaleString('ru-RU', { minimumFractionDigits: 2 }) + ' ₽';
+        }
+      }
+
+      // Инициализация при загрузке страницы
+      const initiallyChecked = document.querySelector('input[name="delivery_method"]:checked');
+      if (initiallyChecked) {
+        if (initiallyChecked.value === 'pickup') {
+          deliveryAddressDiv.style.display = 'none';
+        } else if (initiallyChecked.value === 'courier') {
+          deliveryAddressDiv.style.display = 'block';
+        }
+        updateDeliveryAndTotal(initiallyChecked.value);
+      }
+
+      // Обработчик изменения способа доставки
+      deliveryMethodRadios.forEach(radio => {
+        radio.addEventListener('change', function () {
+          if (this.value === 'pickup') {
+            deliveryAddressDiv.style.display = 'none';
+          } else if (this.value === 'courier') {
+            deliveryAddressDiv.style.display = 'block';
+          }
+          // Обновить стоимость доставки и итоговую сумму
+          updateDeliveryAndTotal(this.value);
+        });
+      });
+        
+    });
+  </script>
+{% endblock %}

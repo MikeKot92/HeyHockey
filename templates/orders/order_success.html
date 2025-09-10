@@ -1,0 +1,32 @@
+{% extends "users/base_users.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center min-vh-100 align-items-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow">
+          <div class="card-body p-5">
+            <!-- Logo -->
+            <div class="text-center mb-4">
+              <a href="#" class="text-decoration-none">
+                <h2 class="fw-bold text-primary">HeyHockey!</h2>
+              </a>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="text-center mb-4">
+              <p>Ваш заказ успешно создан!</p>
+            </div>
+
+            <!-- Login Link -->
+            <div class="text-center mt-4">
+              <a href="{% url 'goods:index' 'all'%}" class="text-primary text-decoration-none">В магазин</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

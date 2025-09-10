@@ -1,5 +1,6 @@
 /* Custom Styles for SportShop */
 
+
 :root {
     --primary-color: #0d6efd;
     --secondary-color: #6c757d;
@@ -103,6 +104,8 @@ body {
     position: relative;
     overflow: hidden;
 }
+
+
 
 .hero-section::before {
     content: '';
@@ -394,6 +397,7 @@ html {
         padding: 1rem;
     }
 }
+
 
 /* Print Styles */
 @media print {

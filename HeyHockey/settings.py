@@ -30,7 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+DOMAIN_NAME = os.environ['DOMAIN_NAME']
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'goods',
     'carts',
     'favorites',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -160,3 +161,7 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_URL = '/user/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+#Yookassa
+YOOKASSA_SHOP_ID = os.environ['YOOKASSA_SHOP_ID']
+YOOKASSA_SECRET_KEY = os.environ['YOOKASSA_SECRET_KEY']

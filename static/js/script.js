@@ -21,8 +21,13 @@ function resetForm() {
     document.getElementById('filter-form').reset();
 }
 
+// Функция переключения изображений
 function changeImage(element) {
     document.getElementById('mainImage').src = element.src;
     document.querySelectorAll('.thumbnail-image').forEach(img => img.classList.remove('active'));
     element.classList.add('active');
 }
+
+
+
+

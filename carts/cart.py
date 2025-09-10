@@ -56,13 +56,13 @@ class Cart:
             for size_id, item_data in self.cart[str(product.id)].items():
                 size = Size.objects.get(id=size_id)
                 total_price = product.sell_price() * item_data['quantity']
-                all_price = product.price * item_data['quantity']
+                price_without_discount = product.price * item_data['quantity']
                 yield {
                     'product': product,
                     'size': size,
                     'quantity': item_data['quantity'],
                     'total_price': total_price,
-                    'all_price': all_price,
+                    'price_without_discount': price_without_discount,
                 }
 
     def get_total_quantity(self):
@@ -82,3 +82,9 @@ class Cart:
             for size_id, item_data in sizes_data.items()
             if product_id in product_dict
         )
+
+    # def get_delivery_cost(self):
+    #     return 500 if self.get_total_price() < 5000 else 0
+    #
+    # def get_total_price_with_delivery(self):
+    #     return self.get_total_price() + self.get_delivery_cost()

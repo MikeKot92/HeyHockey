@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
 from common.mixins import TitleMixin
+from orders.models import Order, OrderItem
 
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 
@@ -50,6 +51,13 @@ class UserProfileView(TitleMixin, LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request, "Данные успешно обновлены!")
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        orders = Order.objects.filter(user=self.request.user).prefetch_related(Prefetch(
+            'items', queryset=OrderItem.objects.select_related('product'))).order_by('-id')
+        context['orders'] = orders
+        return context
 
 class UserLogoutView(LogoutView):
     success_message = 'Вы вышли из аккаунта!'
