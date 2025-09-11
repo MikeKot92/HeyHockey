@@ -1,14 +1,11 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import FormView
 from django.conf import settings
-
+from orders.utils import telegram
 from carts.cart import Cart
 from common.mixins import TitleMixin
 from orders.forms import FormOrder
@@ -101,8 +98,10 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
                     confirmation_url = payment.confirmation.confirmation_url
                     order.payment_id = payment.id
                     order.save()
+                    telegram(order)
                     return redirect(confirmation_url)
                 else:
+                    telegram(order)
                     messages.success(self.request, f"Ваш заказ №{order.id} успешно создан!")
                     return super().form_valid(form)
 
