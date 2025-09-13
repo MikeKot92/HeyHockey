@@ -200,7 +200,7 @@
         
       </div>
       <div class="text-center mt-5">
-        <a href="#" class="btn btn-outline-primary btn-lg">
+        <a href="{% url 'goods:index' 'all' %}" class="btn btn-outline-primary btn-lg">
           Посмотреть все товары
         </a>
       </div>
@@ -208,23 +208,23 @@
   </section>
 
   <!-- Newsletter -->
-  <section class="py-5 bg-primary text-white">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 text-center">
-          <h3 class="mb-3">Подпишитесь на новости</h3>
-          <p class="mb-4">Получайте информацию о новых товарах, скидках и специальных предложениях</p>
-          <form class="row g-3 justify-content-center">
-            <div class="col-md-6">
-              <input type="email" class="form-control form-control-lg" placeholder="Ваш email">
-            </div>
-            <div class="col-auto">
-              <button type="submit" class="btn btn-warning btn-lg">Подписаться</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
+{#  <section class="py-5 bg-primary text-white">#}
+{#    <div class="container">#}
+{#      <div class="row justify-content-center">#}
+{#        <div class="col-lg-8 text-center">#}
+{#          <h3 class="mb-3">Подпишитесь на новости</h3>#}
+{#          <p class="mb-4">Получайте информацию о новых товарах, скидках и специальных предложениях</p>#}
+{#          <form class="row g-3 justify-content-center">#}
+{#            <div class="col-md-6">#}
+{#              <input type="email" class="form-control form-control-lg" placeholder="Ваш email">#}
+{#            </div>#}
+{#            <div class="col-auto">#}
+{#              <button type="submit" class="btn btn-warning btn-lg">Подписаться</button>#}
+{#            </div>#}
+{#          </form>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </section>#}
 
 {% endblock %}

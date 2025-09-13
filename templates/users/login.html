@@ -51,7 +51,7 @@
                           Запомнить меня
                       </label>
                   </div>
-                  <a href="#" class="text-primary text-decoration-none small" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
+                  <a href="{% url 'password_reset' %}" class="text-primary text-decoration-none small" >
                       Забыли пароль?
                   </a>
               </div>
@@ -79,7 +79,7 @@
             <!-- Login Link -->
             <div class="text-center mt-4">
               <span class="text-muted">Нет аккаунта? </span>
-              <a href="{% url 'users:registration' %}" class="text-primary text-decoration-none">Зарегестрироваться</a>
+              <a href="{% url 'users:registration' %}" class="text-primary text-decoration-none">Зарегистрироваться</a>
             </div>
           </div>
         </div>

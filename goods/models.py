@@ -82,8 +82,11 @@ class Product(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+    # def get_size(self):
+    #     return [ps.size.name for ps in self.productsize_set.filter(availability=True).select_related('size')]
+
     def get_size(self):
-        return [ps.size.name for ps in self.productsize_set.filter(availability=True).select_related('size')]
+        return [ps.size.name for ps in self.productsize_set.all() if ps.availability]
 
 
     def get_absolute_url(self):

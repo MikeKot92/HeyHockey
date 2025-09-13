@@ -1,6 +1,7 @@
 {% load static %}
 {% load main_tags %}
 {% load goods_tags %}
+{% load cache %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -35,13 +36,15 @@
             Команды
           </a>
           <ul class="dropdown-menu">
-            {% tag_teams as data %}
-            {% for league in data.league %}
-              <li><strong class="dropdown-item fw-bold">{{ league }}</strong></li>
-              {% for team in league.team_set.all %}
-                <li><a class="dropdown-item" href="{% url 'goods:index' team.slug %}">{{ team }}</a></li>
+            {% cache 300 league %}
+              {% tag_teams as data %}
+              {% for league in data.league %}
+                <li><strong class="dropdown-item fw-bold">{{ league }}</strong></li>
+                {% for team in league.team_set.all %}
+                  <li><a class="dropdown-item" href="{% url 'goods:index' team.slug %}">{{ team }}</a></li>
+                {% endfor %}
               {% endfor %}
-            {% endfor %}
+            {% endcache %}
             <li>
               <a class="dropdown-item" href="{% url 'goods:index' 'all' %}">
                 <strong>ВСЕ КОМАНДЫ</strong>
@@ -56,12 +59,12 @@
             Инфо
           </a>
           <ul class="dropdown-menu">
-
-            {% tag_info as data %}
-            {% for one in data.info %}
-              <li><a class="dropdown-item" href="{% url 'main:info'  one.slug %}">{{ one.name }}</a></li>
-            {% endfor %}
-
+            {% cache 300 info_header %}
+              {% tag_info as data %}
+              {% for one in data.info %}
+                <li><a class="dropdown-item" href="{% url 'main:info'  one.slug %}">{{ one.name }}</a></li>
+              {% endfor %}
+            {% endcache %}
           </ul>
         </li>
         <li class="nav-item">
@@ -130,31 +133,25 @@
 
           HeyHockey!
         </h5>
-        <p class="text-white-50">Ваш надежный партнер в мире спорта. Качественное оборудование для достижения ваших
-          целей.</p>
+        <p class="text-white-50">Ваш надежный партнер в мире спорта.</p>
         <div class="social-links">
-          <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="text-white me-3"><i class="fab fa-vk"></i></a>
           <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
           <a href="#" class="text-white me-3"><i class="fab fa-youtube"></i></a>
           <a href="#" class="text-white"><i class="fab fa-telegram"></i></a>
         </div>
       </div>
-      <div class="col-lg-2 col-md-6">
-        <h6 class="mb-3">Каталог</h6>
-        <ul class="list-unstyled">
-          <li><a href="#" class="text-white-50 text-decoration-none">Фитнес</a></li>
-          <li><a href="#" class="text-white-50 text-decoration-none">Бег</a></li>
-          <li><a href="#" class="text-white-50 text-decoration-none">Тренажеры</a></li>
-          <li><a href="#" class="text-white-50 text-decoration-none">Питание</a></li>
-        </ul>
-      </div>
-      <div class="col-lg-2 col-md-6">
+      <div class="col-lg-4 col-md-6">
         <h6 class="mb-3">Информация</h6>
         <ul class="list-unstyled">
-          <li><a href="#" class="text-white-50 text-decoration-none">О нас</a></li>
-          <li><a href="#" class="text-white-50 text-decoration-none">Доставка</a></li>
-          <li><a href="#" class="text-white-50 text-decoration-none">Оплата</a></li>
-          <li><a href="#" class="text-white-50 text-decoration-none">Гарантия</a></li>
+          {% cache 300 info_footer %}
+            {% tag_info as data %}
+            {% for one in data.info %}
+              <li>
+                <a href="{% url 'main:info'  one.slug %}" class="text-white-50 text-decoration-none">{{ one.name }}</a>
+              </li>
+            {% endfor %}
+          {% endcache %}
         </ul>
       </div>
       <div class="col-lg-4">

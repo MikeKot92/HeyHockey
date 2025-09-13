@@ -79,6 +79,12 @@ class UserProfileForm(UserChangeForm):
         'class': 'form-control',
         'readonly': True,
     }))
+    subscribe_to_newsletter = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        })
+    )
 
     class Meta:
         model = get_user_model()
@@ -88,4 +94,5 @@ class UserProfileForm(UserChangeForm):
             'first_name',
             'last_name',
             'email',
+            'subscribe_to_newsletter',
         )

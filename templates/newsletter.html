@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ news.name }}</title>
+</head>
+<body>
+    <h2>{{ news.name }}</h2>
+    
+    {% if news.image %}
+        <img src="{{ site_url }}{{ news.image.url }}" alt="{{ news.name }}" style="max-width: 100%;">
+    {% endif %}
+    
+    <p>{{ news.description }}</p>
+    
+    <p><a href="{{ site_url }}{% url 'main:news' %}">Читать подробнее</a></p>
+    
+    <hr>
+    <p><small>
+        Вы получили это письмо, потому что подписались на рассылку. 
+        <a href="{{ site_url }}{% url 'users:profile' %}">Отписаться</a>
+    </small></p>
+</body>
+</html>

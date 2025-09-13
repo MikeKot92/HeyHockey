@@ -59,6 +59,10 @@
                   {% csrf_token %}
 
                   <div class="row">
+                    <div class="mb-3">
+                      <label for="{{ form.image.id_for_label }}" class="form-label">Изображение</label>
+                      {{ form.image }}
+                    </div>
                     <div class="col-md-6 mb-3">
                       <label for="{{ form.first_name.id_for_label }}" class="form-label">Имя</label>
                       {{ form.first_name }}
@@ -82,10 +86,16 @@
                     </div>
 
                   </div>
-                  <div class="mb-3">
-                    <label for="{{ form.image.id_for_label }}" class="form-label">Изображение</label>
-                    {{ form.image }}
+
+                  <div class="mb-3 mt-3">
+                    <div class="form-check">
+                      {{ form.subscribe_to_newsletter }}
+                      <label class="form-check-label" for="{{ form.subscribe_to_newsletter.id_for_label }}">
+                        Согласие на рассылку новостей и специальных предложений
+                      </label>
+                    </div>
                   </div>
+
                   <button type="submit" class="btn btn-accent">Сохранить изменения</button>
                 </form>
               </div>
@@ -116,11 +126,11 @@
                         <strong>{{ order.summa }} ₽</strong>
                       </div>
                       <div class="col-md-3">
-                      {% if order.is_paid %}
-                        <small class="text-success">Оплачен</small>
-                      {% else %}
-                        <small class="text-warning">Не оплачен</small>
-                      {% endif %}
+                        {% if order.is_paid %}
+                          <small class="text-success">Оплачен</small>
+                        {% else %}
+                          <small class="text-warning">Не оплачен</small>
+                        {% endif %}
                       </div>
                       <div class="col-md-2">
                         <button class="btn btn-outline-accent btn-sm" data-bs-toggle="collapse"

@@ -54,6 +54,35 @@ class ProductListView(TitleMixin, ListView):
         return context
 
 
+# class ProductDetailView(TitleMixin, DetailView):
+#     title = 'Product'
+#     model = Product
+#     template_name = 'goods/product_detail.html'
+#     context_object_name = 'product'
+#     slug_field = 'slug'
+#     slug_url_kwarg = 'product_slug'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         product = self.object
+#         sizes = product.get_size()
+#         status = product.status
+#
+#         recommendation = list(Product.objects.filter(team=product.team).exclude(slug=product.slug))
+#         if len(recommendation) >= 5:
+#             recommendation = random.sample(recommendation, 5)
+#         else:
+#             recommendation = None
+#
+#         context.update({
+#             'recommendation': recommendation,
+#             'sizes': sizes,
+#             'status': status,
+#         })
+#
+#         return context
+
+
 class ProductDetailView(TitleMixin, DetailView):
     title = 'Product'
     model = Product
@@ -62,18 +91,26 @@ class ProductDetailView(TitleMixin, DetailView):
     slug_field = 'slug'
     slug_url_kwarg = 'product_slug'
 
+    def get_queryset(self):
+        return Product.objects.select_related(
+            'team',
+            'team__league',
+            'category'
+        ).prefetch_related(
+            'images',
+            'productsize_set__size'
+        )
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = self.object
         sizes = product.get_size()
         status = product.status
-
-        recommendation = list(Product.objects.filter(team=product.team).exclude(slug=product.slug))
-        if len(recommendation) >= 5:
-            recommendation = random.sample(recommendation, 5)
-        else:
-            recommendation = None
-
+        recommendation = list(Product.objects.select_related('team').filter(
+            team=product.team
+        ).exclude(
+            slug=product.slug
+        )[:5])
         context.update({
             'recommendation': recommendation,
             'sizes': sizes,
@@ -81,5 +118,3 @@ class ProductDetailView(TitleMixin, DetailView):
         })
 
         return context
-
-
