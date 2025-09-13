@@ -22,6 +22,12 @@ class UserLoginView(TitleMixin, SuccessMessageMixin, LoginView):
     template_name = 'users/login.html'
     success_message = 'Вы вошли в аккаунт!'
 
+    def form_valid(self, form):
+        remember_me = form.cleaned_data.get('remember_me')
+        if not remember_me:
+            self.request.session.set_expiry(0)
+        return super().form_valid(form)
+
 
 class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
     title = 'Registration'

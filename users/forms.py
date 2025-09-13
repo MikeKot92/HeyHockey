@@ -13,12 +13,19 @@ class UserLoginForm(AuthenticationForm):
         'class': 'form-control',
         'placeholder': 'Пароль',
     }))
+    remember_me = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        })
+    )
 
     class Meta:
         model = User
         fields = (
             'username',
             'password',
+            'remember_me',
         )
 
 
