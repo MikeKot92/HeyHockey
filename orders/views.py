@@ -47,7 +47,7 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
                     user=user,
                     name=form.cleaned_data.get('first_name') + ' ' + form.cleaned_data.get('last_name'),
                     delivery_address=form.cleaned_data.get('city') + ' ' + form.cleaned_data.get(
-                        'street') + ' ' + form.cleaned_data.get('house') + ' ' + form.cleaned_data.get('apartment'),
+                        'street') + ' д. ' + form.cleaned_data.get('house') + ' кв. ' + form.cleaned_data.get('apartment'),
                     delivery_method=form.cleaned_data.get('delivery_method'),
                     delivery_cost=delivery_cost,
                     phone=form.cleaned_data.get('phone'),

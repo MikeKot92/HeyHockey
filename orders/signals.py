@@ -7,14 +7,23 @@ from .models import Order
 
 
 @receiver(post_save, sender=Order,)
-def handle_order_completed(sender, instance, created, **kwargs):
+def handle_order(sender, instance, created, **kwargs):
     try:
+        status_display = instance.get_status_display()
+
+        delivery_method_display = instance.get_delivery_method_display()
+
+        payment_method_display = instance.get_payment_method_display()
+
         message = (
             f"Заказ №{instance.id}\n"
-            f"Статус: {instance.status}\n"
-            f"Общая сумма: {instance.summa} руб.\n"
-            f"Оплата: {'Оплачен' if instance.is_paid else 'Не оплачен'}\n"
+            f"Статус: {status_display}\n"
+            f"Способ доставки: {delivery_method_display}\n"
             f"Адрес доставки: {instance.delivery_address}\n"
+            f"Способ оплаты: {payment_method_display}\n"
+            f"Оплата: {'Оплачен' if instance.is_paid else 'Не оплачен'}\n"
+            f"Стоимость доставки: {instance.delivery_cost} руб.\n"
+            f"Общая сумма: {instance.summa} руб.\n"
         )
 
         if created:
@@ -40,4 +49,4 @@ def handle_order_completed(sender, instance, created, **kwargs):
             fail_silently=False,
         )
     except Exception as e:
-        print(f'handle_order_completed {e}')
+        print(f'handle_order {e}')
