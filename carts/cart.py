@@ -110,9 +110,3 @@ class Cart:
             for size_id, item_data in sizes_data.items()
             if product_id in product_dict
         )
-
-    # def get_delivery_cost(self):
-    #     return 500 if self.get_total_price() < 5000 else 0
-    #
-    # def get_total_price_with_delivery(self):
-    #     return self.get_total_price() + self.get_delivery_cost()

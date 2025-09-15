@@ -1,11 +1,12 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 User = get_user_model()
 
+
 class Info(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
-    description = models.TextField( blank=True, null=True, verbose_name='Содержание')
+    description = models.TextField(blank=True, null=True, verbose_name='Содержание')
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
 
     class Meta:
@@ -20,7 +21,7 @@ class Info(models.Model):
 class News(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
     image = models.ImageField(upload_to='news/', verbose_name='Изображение')
-    description = models.TextField( blank=True, null=True, verbose_name='Содержание',)
+    description = models.TextField(blank=True, null=True, verbose_name='Содержание', )
     created_at = models.DateField(auto_now_add=True, verbose_name='Дата публикации')
 
     class Meta:
@@ -34,12 +35,12 @@ class News(models.Model):
 
 
 class Review(models.Model):
-    STATUS_CHOICES = (('Модерация','Модерация'),('Опубликован','Опубликован'),)
+    STATUS_CHOICES = (('Модерация', 'Модерация'), ('Опубликован', 'Опубликован'),)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Пользователь')
     text = models.TextField(verbose_name='Отзыв')
     rating = models.IntegerField(verbose_name='Рейтинг')
     status = models.CharField(max_length=100, default='Модерация', choices=STATUS_CHOICES, verbose_name='Статус')
-    created_at = models.DateField(auto_now_add=True, verbose_name='Дата создания' )
+    created_at = models.DateField(auto_now_add=True, verbose_name='Дата создания')
 
     class Meta:
         db_table = 'review'

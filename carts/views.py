@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 
 from carts.cart import Cart
 from goods.models import Product, Size
@@ -32,6 +32,7 @@ def cart_remove(request, product_id, size_id):
     size = get_object_or_404(Size, id=size_id)
     cart.remove(product=product, size=size)
     return redirect(request.META['HTTP_REFERER'])
+
 
 def cart_clear(request):
     cart = Cart(request)

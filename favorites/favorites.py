@@ -17,7 +17,6 @@ class Favorites:
             self.favorites.remove(product_id)
             self.save()
 
-
     def save(self):
         self.session['favorites'] = self.favorites
         self.session.modified = True

@@ -27,4 +27,3 @@ class User(AbstractUser):
                 pass
             except Exception as e:
                 print(f"Ошибка при обработке изображения: {e}")
-

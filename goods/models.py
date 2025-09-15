@@ -65,7 +65,7 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
     price = models.DecimalField(default=0.00, max_digits=7, decimal_places=2, verbose_name='Цена')
     discount = models.PositiveIntegerField(default=0, verbose_name='Скидка в %')
-    status = models.SmallIntegerField( default=0, choices=STATUS, verbose_name='Статус')
+    status = models.SmallIntegerField(default=0, choices=STATUS, verbose_name='Статус')
     video_src = models.URLField(blank=True, null=True, verbose_name='SRC-video')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     category = models.ForeignKey(to=Categories, on_delete=models.CASCADE, verbose_name='Категория')
@@ -78,7 +78,6 @@ class Product(models.Model):
         verbose_name_plural = 'Продукты'
         ordering = ('id',)
 
-
     def __str__(self):
         return f'{self.name}'
 
@@ -87,7 +86,6 @@ class Product(models.Model):
 
     def get_size(self):
         return [ps.size.name for ps in self.productsize_set.all() if ps.availability]
-
 
     def get_absolute_url(self):
         return reverse('catalog:product', kwargs={'product_slug': self.slug})

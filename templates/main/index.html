@@ -10,12 +10,13 @@
             Достигай новых высот с <span class="text-warning">HeyHockey!</span>
           </h1>
           <p class="lead text-white-50 mb-4">
-            Профессиональное спортивное оборудование для достижения ваших целей.
+            Хоккейная атрибутика и аксессуары от ведущих мировых брендов.
             Качество, надежность и лучшие цены.
           </p>
         </div>
         <div class="col-lg-6 text-center">
-          <img src="https://flomaster.top/uploads/posts/2022-07/1658279787_4-flomaster-club-p-narisovannii-khokkeist-krasivo-5.png" alt="Спортивное оборудование" class="img-fluid hero-image" width="50%">
+          <img src="https://flomaster.top/uploads/posts/2022-07/1658279787_4-flomaster-club-p-narisovannii-khokkeist-krasivo-5.png"
+               alt="Спортивное оборудование" class="img-fluid hero-image" width="50%">
         </div>
       </div>
     </div>
@@ -27,7 +28,7 @@
       <div class="row text-center mb-5">
         <div class="col-12">
           <h2 class="display-5 fw-bold mb-3">Почему выбирают нас</h2>
-          <p class="lead text-muted">Мы предлагаем лучшие условия для ваших спортивных достижений</p>
+          <p class="lead text-muted">Мы предлагаем лучшие условия для настоящих фанатов</p>
         </div>
       </div>
       <div class="row g-4">
@@ -38,7 +39,7 @@
                 <i class="fas fa-shipping-fast"></i>
               </div>
               <h5 class="card-title">Быстрая доставка</h5>
-              <p class="card-text text-muted">Доставка по всей России за 1-3 дня. Бесплатная доставка от 5000₽</p>
+              <p class="card-text text-muted">Доставка по Москве за 1-2 дня. Бесплатная доставка от 5000₽</p>
             </div>
           </div>
         </div>
@@ -49,7 +50,7 @@
                 <i class="fas fa-medal"></i>
               </div>
               <h5 class="card-title">Качество</h5>
-              <p class="card-text text-muted">Только проверенные бренды и сертифицированное оборудование</p>
+              <p class="card-text text-muted">Только проверенные бренды и сертифицированный товар</p>
             </div>
           </div>
         </div>
@@ -60,7 +61,7 @@
                 <i class="fas fa-headset"></i>
               </div>
               <h5 class="card-title">Поддержка 24/7</h5>
-              <p class="card-text text-muted">Наши эксперты помогут выбрать подходящее оборудование</p>
+              <p class="card-text text-muted">Наши менеджеры помогут выбрать подходящий размер</p>
             </div>
           </div>
         </div>
@@ -78,126 +79,66 @@
         </div>
       </div>
       <div class="row g-4">
+      
+        {% for product in popular_products %}
+          <div class="col-lg-3 col-md-6">
+            <div class="card product-card h-100 border-0 shadow-sm">
+              <a href="{% url 'goods:product' product.slug %}" style="text-decoration: none; " class="product-link">
+                <div class="position-relative">
+                  {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                  {% else %}
+                    <div class="d-flex flex-column align-items-center justify-content-center bg-light"
+                         style="height: 200px;">
+                      <i class="fas fa-image fa-2x text-muted mb-2"></i>
+                      <span class="text-muted small text-center px-2">{{ product.name|truncatewords:3 }}</span>
+                    </div>
+                  {% endif %}
+                  <div class="position-absolute top-0 start-0 m-2 d-flex flex-column gap-1">
+                    <span class="badge bg-success ">Хит</span>
+                    {% if product.discount %}
+                      <span class="badge bg-warning ">-{{ product.discount }}%</span>
+                    {% endif %}
+                  </div>
+                  <div class="product position-absolute top-0 end-0 m-2">
+                    {% if product.id in favorites.favorites %}
+                      <a href="{% url 'favorites:toggle_favorite' product.id %}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-heart"></i>
+                      </a>
+                    {% else %}
+                      <a href="{% url 'favorites:toggle_favorite' product.id %}" class="btn btn-light btn-sm">
+                        <i class="fas fa-heart"></i>
+                      </a>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="card-body">
+                  <h6 class="card-title">{{ product.name }}</h6>
+                  <p class="card-text text-muted small">{{ product.description|truncatewords:3 }}</p>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                      {% if product.discount %}
+                        <span class="text-decoration-line-through text-muted">{{ product.price }} ₽</span>
+                        <span class="fw-bold text-primary ms-1">{{ product.sell_price }} ₽</span>
+                      {% else %}
+                        <strong class="fw-bold text-primary ms-1">{{ product.price }} ₽</strong>
+                      {% endif %}
+                    </div>
 
-        
-        <div class="col-lg-3 col-md-6">
-          <div class="card product-card h-100 border-0 shadow-sm">
-            <div class="position-relative">
-              <img src="https://www.fitnesslook.ru/i/product_i/15253_12_b.jpg?height=250&width=300" class="card-img-top" alt="Гантели">
-              <span class="badge bg-danger position-absolute top-0 end-0 m-2">-20%</span>
-            </div>
-            <div class="card-body">
-              <h6 class="card-title">Гантели разборные 20кг</h6>
-              <p class="card-text text-muted small">Профессиональные гантели для домашних тренировок</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <span class="text-decoration-line-through text-muted">4999₽</span>
-                  <span class="fw-bold text-primary ms-1">3999₽</span>
+                  </div>
                 </div>
-                <div class="rating">
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
+                <div class="card-body d-flex flex-column justify-content-center">
+                  {% if product.status %}
+                    <span class="availability-true text-center text-success">	&bull;  В наличии</span>
+                  {% else %}
+                    <span class="availability-false text-center text-danger">	&bull;  Нет в наличии</span>
+                  {% endif %}
                 </div>
-              </div>
-            </div>
-            <div class="card-footer bg-transparent border-0">
-              <button class="btn btn-primary w-100">
-                <i class="fas fa-cart-plus me-2"></i>В корзину
-              </button>
+              </a>
             </div>
           </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="card product-card h-100 border-0 shadow-sm">
-            <div class="position-relative">
-              <img src="https://www.fitnesslook.ru/i/product_i/15253_12_b.jpg?height=250&width=300" class="card-img-top" alt="Беговая дорожка">
-              <span class="badge bg-success position-absolute top-0 end-0 m-2">Хит</span>
-            </div>
-            <div class="card-body">
-              <h6 class="card-title">Беговая дорожка Pro</h6>
-              <p class="card-text text-muted small">Электрическая беговая дорожка с LCD дисплеем</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <span class="fw-bold text-primary">89999₽</span>
-                </div>
-                <div class="rating">
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="far fa-star text-warning"></i>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer bg-transparent border-0">
-              <button class="btn btn-primary w-100">
-                <i class="fas fa-cart-plus me-2"></i>В корзину
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="card product-card h-100 border-0 shadow-sm">
-            <img src="https://www.fitnesslook.ru/i/product_i/15253_12_b.jpg?height=250&width=300" class="card-img-top"
-                 alt="Коврик для йоги">
-            <div class="card-body">
-              <h6 class="card-title">Коврик для йоги Premium</h6>
-              <p class="card-text text-muted small">Экологичный коврик из натурального каучука</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <span class="fw-bold text-primary">2499₽</span>
-                </div>
-                <div class="rating">
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer bg-transparent border-0">
-              <button class="btn btn-primary w-100">
-                <i class="fas fa-cart-plus me-2"></i>В корзину
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="card product-card h-100 border-0 shadow-sm">
-            <img src="https://fitlandtd.ru/upload/iblock/ddb/KFLE.png?height=250&width=300" class="card-img-top"
-                 alt="Протеин">
-            <div class="card-body">
-              <h6 class="card-title">Протеин Whey Gold 2кг</h6>
-              <p class="card-text text-muted small">Сывороточный протеин высокого качества</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <span class="fw-bold text-primary">3299₽</span>
-                </div>
-                <div class="rating">
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="fas fa-star text-warning"></i>
-                  <i class="far fa-star text-warning"></i>
-                </div>
-              </div>
-            </div>
-            <div class="card-footer bg-transparent border-0">
-              <button class="btn btn-primary w-100">
-                <i class="fas fa-cart-plus me-2"></i>В корзину
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        
+        {% endfor %}
+      
       </div>
       <div class="text-center mt-5">
         <a href="{% url 'goods:index' 'all' %}" class="btn btn-outline-primary btn-lg">
@@ -208,23 +149,23 @@
   </section>
 
   <!-- Newsletter -->
-{#  <section class="py-5 bg-primary text-white">#}
-{#    <div class="container">#}
-{#      <div class="row justify-content-center">#}
-{#        <div class="col-lg-8 text-center">#}
-{#          <h3 class="mb-3">Подпишитесь на новости</h3>#}
-{#          <p class="mb-4">Получайте информацию о новых товарах, скидках и специальных предложениях</p>#}
-{#          <form class="row g-3 justify-content-center">#}
-{#            <div class="col-md-6">#}
-{#              <input type="email" class="form-control form-control-lg" placeholder="Ваш email">#}
-{#            </div>#}
-{#            <div class="col-auto">#}
-{#              <button type="submit" class="btn btn-warning btn-lg">Подписаться</button>#}
-{#            </div>#}
-{#          </form>#}
-{#        </div>#}
-{#      </div>#}
-{#    </div>#}
-{#  </section>#}
+  {#  <section class="py-5 bg-primary text-white">#}
+  {#    <div class="container">#}
+  {#      <div class="row justify-content-center">#}
+  {#        <div class="col-lg-8 text-center">#}
+  {#          <h3 class="mb-3">Подпишитесь на новости</h3>#}
+  {#          <p class="mb-4">Получайте информацию о новых товарах, скидках и специальных предложениях</p>#}
+  {#          <form class="row g-3 justify-content-center">#}
+  {#            <div class="col-md-6">#}
+  {#              <input type="email" class="form-control form-control-lg" placeholder="Ваш email">#}
+  {#            </div>#}
+  {#            <div class="col-auto">#}
+  {#              <button type="submit" class="btn btn-warning btn-lg">Подписаться</button>#}
+  {#            </div>#}
+  {#          </form>#}
+  {#        </div>#}
+  {#      </div>#}
+  {#    </div>#}
+  {#  </section>#}
 
 {% endblock %}

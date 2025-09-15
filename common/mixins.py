@@ -1,5 +1,6 @@
 from django.core.cache import cache
 
+
 class TitleMixin:
     title = None
 
@@ -7,6 +8,7 @@ class TitleMixin:
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
         return context
+
 
 class CacheMixin:
 
@@ -16,6 +18,3 @@ class CacheMixin:
             data = query
             cache.set(cache_name, data, cache_time)
         return data
-
-
-

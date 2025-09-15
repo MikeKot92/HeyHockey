@@ -1,5 +1,4 @@
 import telebot
-
 from django.conf import settings
 
 
@@ -19,7 +18,8 @@ def telegram(order):
         is_paid = '(Оплачен)' if order.is_paid else '(Не оплачен)'
         order_description = ''
         for item in order.items.all():
-            order_description += item.product.name + ' ' + item.size + ' ' + str(item.quantity) + 'шт. ' + str(item.price) + '\n'
+            order_description += item.product.name + ' ' + item.size + ' ' + str(item.quantity) + 'шт. ' + str(
+                item.price) + '\n'
         order_description += 'Статус: ' + status + '\n'
         order_description += 'Оплата: ' + pay + is_paid + '\n'
         order_description += 'Доставка: ' + delivery + '\n'

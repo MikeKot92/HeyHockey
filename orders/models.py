@@ -1,6 +1,7 @@
-from django.db import models
-from goods.models import Product
 from django.contrib.auth import get_user_model
+from django.db import models
+
+from goods.models import Product
 
 User = get_user_model()
 
@@ -14,9 +15,7 @@ class OrderitemQueryset(models.QuerySet):
             return sum(cart.quantity for cart in self)
 
 
-
 class Order(models.Model):
-
     PAYMENT_METHOD_CHOICES = [
         ('online', 'Онлайн оплата'),
         ('cash_on_delivery', 'Оплата при получении'),
@@ -86,6 +85,7 @@ class Order(models.Model):
     def __str__(self):
         return f'Заказ №{self.id}'
 
+
 class OrderItem(models.Model):
     order = models.ForeignKey(to=Order, on_delete=models.CASCADE, related_name='items', verbose_name='Заказ')
     product = models.ForeignKey(to=Product, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Продукт')
@@ -103,9 +103,7 @@ class OrderItem(models.Model):
     def __str__(self):
         return f'{self.name}'
 
-
     objects = OrderitemQueryset.as_manager()
 
     def products_price(self):
-        return round(self.price*self.quantity, 2)
-
+        return round(self.price * self.quantity, 2)

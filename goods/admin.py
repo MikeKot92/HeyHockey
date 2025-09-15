@@ -1,10 +1,12 @@
 from django.contrib import admin
 
-from goods.models import Categories, Product, Size, Team, League, ProductImage, ProductSize
+from goods.models import (Categories, League, Product, ProductImage,
+                          ProductSize, Size, Team)
+
 
 @admin.register(Size)
 class SizeAdmin(admin.ModelAdmin):
-    list_display = ['name',]
+    list_display = ['name', ]
 
 
 @admin.register(Categories)
@@ -43,4 +45,3 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(League)
 class LeagueAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
-

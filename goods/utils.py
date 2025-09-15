@@ -1,6 +1,6 @@
-from goods.views import Product
-
 from django.db.models import Q
+
+from goods.views import Product
 
 
 def q_search(query):

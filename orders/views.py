@@ -1,18 +1,19 @@
+import uuid
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
-from django.conf import settings
-from orders.utils import telegram
+from yookassa import Configuration, Payment
+
 from carts.cart import Cart
 from common.mixins import TitleMixin
 from orders.forms import FormOrder
 from orders.models import Order, OrderItem
-import uuid
-
-from yookassa import Configuration, Payment
+from orders.utils import telegram
 
 Configuration.account_id = settings.YOOKASSA_SHOP_ID
 Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
@@ -47,7 +48,8 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
                     user=user,
                     name=form.cleaned_data.get('first_name') + ' ' + form.cleaned_data.get('last_name'),
                     delivery_address=form.cleaned_data.get('city') + ' ' + form.cleaned_data.get(
-                        'street') + ' д. ' + form.cleaned_data.get('house') + ' кв. ' + form.cleaned_data.get('apartment'),
+                        'street') + ' д. ' + form.cleaned_data.get('house') + ' кв. ' + form.cleaned_data.get(
+                        'apartment'),
                     delivery_method=form.cleaned_data.get('delivery_method'),
                     delivery_cost=delivery_cost,
                     phone=form.cleaned_data.get('phone'),
@@ -108,6 +110,3 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
         except Exception as e:
             print(f'create_orders {e}')
             return redirect('carts:my_cart')
-
-
-

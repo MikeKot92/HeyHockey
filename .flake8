@@ -1,0 +1,13 @@
+[flake8]
+exclude =
+    migrations
+    .\.venv
+    __init__.py
+    tests.py
+    .env
+
+per-file-ignores =
+    admin.py:F401
+    apps.py:F401
+
+max-line-length = 120

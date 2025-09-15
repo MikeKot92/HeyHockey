@@ -106,9 +106,9 @@
         <div class="row g-4" id="products-grid">
 
           {% for product in products %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+            
               {% include 'goods/components/product_card.html' %}
-            </div>
+            
           {% empty %}
             <h3>Ничего не найдено... <i class="bi bi-search"></i></h3>
           {% endfor %}
@@ -144,4 +144,5 @@
       </div>
     </div>
   </div>
+  
 {% endblock %}

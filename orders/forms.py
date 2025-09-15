@@ -3,7 +3,6 @@ from django.core.validators import RegexValidator
 
 
 class FormOrder(forms.Form):
-
     first_name = forms.CharField(
         label='Имя',
         max_length=50,
@@ -140,4 +139,3 @@ class FormOrder(forms.Form):
                 self.add_error('house', 'Номер дома обязателен при курьерской доставке.')
 
         return cleaned_data
-

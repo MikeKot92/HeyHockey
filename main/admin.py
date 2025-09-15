@@ -7,10 +7,11 @@ from main.models import Info, News, Review
 class InfoAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
+
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ['user', 'rating', 'text_display', 'status', ]
-    list_editable = ['status',]
+    list_editable = ['status', ]
 
     def text_display(self, obj):
         text = obj.text[:50]

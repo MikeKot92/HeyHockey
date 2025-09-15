@@ -1,17 +1,21 @@
-from django.db.models import Sum
-from django.views.generic import TemplateView, DetailView
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.views.generic import DetailView, TemplateView
+
 from common.mixins import TitleMixin
 from goods.models import Product
 from main.models import Info, News, Review
-from django.contrib import messages
-from django.shortcuts import redirect
-
-from orders.models import OrderItem
 
 
 class IndexTemplateView(TitleMixin, TemplateView):
     title = 'Home'
     template_name = 'main/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = Product.objects.all().order_by('-id')
+        context['popular_products'] = queryset[:4]
+        return context
 
 
 class NewsTemplateView(TitleMixin, TemplateView):
@@ -30,6 +34,7 @@ class InfoDetailView(TitleMixin, DetailView):
     template_name = 'main/info.html'
     context_object_name = 'info'
     slug_url_kwarg = 'info_slug'
+
 
 class ReviewTemplateView(TitleMixin, TemplateView):
     title = 'Review'

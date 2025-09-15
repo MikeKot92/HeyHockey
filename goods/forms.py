@@ -1,13 +1,6 @@
 from django import forms
+
 from goods.models import Categories, Size
-
-
-# class FilterForm(forms.Form):
-#     price_choice = (('default', 'по умолчанию',), ('price', 'по возрастанию'), ('-price', 'по убыванию',),)
-#     price = forms.ChoiceField(label='Цена', choices=price_choice, initial=price_choice)
-#     discount = forms.BooleanField(label='Товары по акции', required=False)
-#     category = forms.ModelChoiceField(Categories.objects.all(), label='Выберите категорию', empty_label='все', required=False)
-#     size = forms.ModelChoiceField(Size.objects.all().exclude(name='Б\р'), label='Выберите размер', empty_label='все', required=False)
 
 
 class FilterForm(forms.Form):
@@ -42,4 +35,3 @@ class FilterForm(forms.Form):
         required=False,
         label='Размеры'
     )
-

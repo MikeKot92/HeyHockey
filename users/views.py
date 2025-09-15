@@ -1,4 +1,4 @@
-from django.contrib import auth, messages
+from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
@@ -8,10 +8,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
-from common.mixins import TitleMixin, CacheMixin
+from common.mixins import CacheMixin, TitleMixin
 from orders.models import Order, OrderItem
-
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
+from users.forms import UserLoginForm, UserProfileForm, UserRegistrationForm
 
 User = get_user_model()
 
@@ -64,6 +63,7 @@ class UserProfileView(TitleMixin, CacheMixin, LoginRequiredMixin, UpdateView):
             'items', queryset=OrderItem.objects.select_related('product'))).order_by('-id')
         context['orders'] = self.set_get_cache(orders, f'orders_for_user{self.request.user.id}', 60)
         return context
+
 
 class UserLogoutView(LogoutView):
     success_message = 'Вы вышли из аккаунта!'
