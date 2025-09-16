@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db import models
 from unfold.admin import ModelAdmin
 from unfold.contrib.forms.widgets import WysiwygWidget
+
 from main.models import Info, News, Review
 
 
@@ -29,7 +30,7 @@ class ReviewAdmin(ModelAdmin):
 
 
 @admin.register(News)
-class InfoAdmin(ModelAdmin):
+class NewsAdmin(ModelAdmin):
     list_display = ['name', 'created_at']
 
     formfield_overrides = {

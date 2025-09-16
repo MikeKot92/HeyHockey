@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'debug_toolbar',
+    'social_django',
 
     'main',
     'users',
@@ -61,6 +62,13 @@ INSTALLED_APPS = [
     'favorites',
     'orders',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,6 +97,9 @@ TEMPLATES = [
 
                 'carts.context_processors.carts',
                 'favorites.context_processors.favorites',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -208,3 +219,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Celery
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+
+# OAuth
+SOCIAL_AUTH_GITHUB_KEY = os.environ['SOCIAL_AUTH_GITHUB_KEY']
+SOCIAL_AUTH_GITHUB_SECRET = os.environ['SOCIAL_AUTH_GITHUB_SECRET']

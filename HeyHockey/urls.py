@@ -13,6 +13,7 @@ urlpatterns = [
     path('', include('favorites.urls', namespace='favorites')),
     path('orders/', include('orders.urls', namespace='orders')),
     path('auth/', include('django.contrib.auth.urls')),
+    path('oauth/', include('social_django.urls', namespace='social')),
 ]
 
 if settings.DEBUG:

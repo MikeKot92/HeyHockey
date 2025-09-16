@@ -25,7 +25,7 @@
               <span class="badge bg-warning position-absolute top-0 start-0 m-3">-{{ product.discount }}%</span>
             {% endif %}
           
-            <div class="product position-absolute top-0 end-0 m-2">
+            <div id="favorites-detail" class="product position-absolute top-0 end-0 m-2">
               {% if product.id in favorites.favorites %}
                 <a href="{% url 'favorites:toggle_favorite' product.id %}" class="btn btn-danger btn-sm">
                   <i class="fas fa-heart"></i>
