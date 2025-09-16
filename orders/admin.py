@@ -1,9 +1,11 @@
 from django.contrib import admin
-
+from django.db import models
+from unfold.admin import ModelAdmin, TabularInline
+from unfold.contrib.forms.widgets import WysiwygWidget
 from orders.models import Order, OrderItem
 
 
-class OrderItemTabulareAdmin(admin.TabularInline):
+class OrderItemTabulareAdmin(TabularInline):
     model = OrderItem
     fields = 'product', 'price', 'quantity', 'size',
     search_fields = [
@@ -15,7 +17,7 @@ class OrderItemTabulareAdmin(admin.TabularInline):
 
 
 @admin.register(OrderItem)
-class OrderItemAdmin(admin.ModelAdmin):
+class OrderItemAdmin(ModelAdmin):
     list_display = ['order_display', 'name', 'price', 'quantity']
     search_fields = ['name', 'order']
     list_filter = ['created_at']
@@ -27,7 +29,7 @@ class OrderItemAdmin(admin.ModelAdmin):
     order_display.short_description = 'Заказ'
 
 
-class OrderTabulareAdmin(admin.TabularInline):
+class OrderTabulareAdmin(TabularInline):
     model = Order
     fields = ('address', 'delivery', 'pay', 'status', 'summa', 'created_timestamp',)
     search_fields = [
@@ -40,7 +42,7 @@ class OrderTabulareAdmin(admin.TabularInline):
 
 
 @admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
+class OrderAdmin(ModelAdmin):
     list_display = ['order_id', 'user', 'name', 'is_paid', 'delivery_method', 'status', 'summa', 'created_at', ]
     list_filter = ['created_at', 'is_paid', 'status', 'delivery_method']
     search_fields = ['name', 'id', ]

@@ -16,7 +16,7 @@
             <div class="col-12 col-md-8">
               <div class="p-4 h-100 d-flex flex-column">
                 <h4 class="mb-3">{{ one_news.name }}</h4>
-                <p class="mb-4 flex-grow-1">{{ one_news.description }}</p>
+                <p class="mb-4 flex-grow-1">{{ one_news.description|safe }}</p>
                 <small class="text-muted">{{ one_news.created_at|date:"SHORT_DATE_FORMAT" }}</small>
               </div>
             </div>

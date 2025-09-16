@@ -127,7 +127,7 @@
             {% else %}
               <strong>
                 &bull; В данный момент этого товара нет в наличии,
-                срок доставки можно уточнить у менеджера.
+                сроки поступления можно уточнить у менеджера.
               </strong>
             {% endif %}
           </div>
@@ -193,7 +193,7 @@
         <!-- Вкладка "Описание товара" -->
         <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
           <div class="px-4 py-3">
-            <p>{{ product.description|default:"Описание отсутствует" }}</p>
+            <p>{{ product.description|default:"Описание отсутствует"|safe }}</p>
           </div>
         </div>
 
@@ -206,8 +206,7 @@
                         allow="encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
                         frameborder="0"
                         allowfullscreen
-                        style="border: 2px solid #df0da8;border-radius: 30px;box-shadow: -15px 15px 20px 0px rgba(0,195,179,0.6);">
-                </iframe>
+                        style="border: 2px solid #df0da8;border-radius: 30px;box-shadow: -15px 15px 20px 0px rgba(0,195,179,0.6);"></iframe>
               </div>
             </div>
           </div>
