@@ -88,7 +88,7 @@ class Product(models.Model):
         return [ps.size.name for ps in self.productsize_set.all() if ps.availability]
 
     def get_absolute_url(self):
-        return reverse('catalog:product', kwargs={'product_slug': self.slug})
+        return reverse('goods:product', kwargs={'product_slug': self.slug})
 
     def sell_price(self):
         if self.discount:

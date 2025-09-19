@@ -3,10 +3,11 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-
+import logging
 from .models import News
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -38,8 +39,10 @@ def send_newsletter_task(news_id):
                         С уважением,
                         Команда HeyHockey!
             """
-            sent_count = 0
+
             for subscriber in subscribers:
+                if not subscriber.email:
+                    continue
                 msg = EmailMultiAlternatives(
                     subject=subject,
                     body=text_content,
@@ -48,7 +51,6 @@ def send_newsletter_task(news_id):
                 )
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
-                sent_count += 1
 
     except Exception as e:
-        print(f"Ошибка при отправке рассылки новости: {e}")
+        logger.error(f"Ошибка при отправке рассылки новости: {e}")

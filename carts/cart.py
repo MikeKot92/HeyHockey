@@ -53,7 +53,6 @@ class Cart:
         self._sizes_cache = None
 
     def _get_products_and_sizes(self):
-        """Получаем все продукты и размеры одним запросом и кэшируем их"""
         if self._products_cache is not None and self._sizes_cache is not None:
             return self._products_cache, self._sizes_cache
 

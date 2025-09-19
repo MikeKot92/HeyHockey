@@ -12,7 +12,7 @@ def cart_add(request, product_id):
     quantity = 1
     size = Size.objects.get(name=size_value)
     cart.add(product=product, size=size, quantity=quantity)
-    messages.success(request, f"Товар {product.name} успешно добавлен в корзину!")
+    messages.success(request, f"Товар добавлен в корзину!")
     return redirect(request.META['HTTP_REFERER'])
 
 

@@ -1,5 +1,5 @@
 import uuid
-
+import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,15 +8,21 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from yookassa import Configuration, Payment
-
+import json
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views import View
 from carts.cart import Cart
 from common.mixins import TitleMixin
 from orders.forms import FormOrder
-from orders.models import Order, OrderItem
-from orders.utils import telegram
+from orders.models import Order
+from orders.utils import telegram, create_order
 
 Configuration.account_id = settings.YOOKASSA_SHOP_ID
 Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
+
+logger = logging.getLogger(__name__)
 
 
 class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
@@ -44,41 +50,6 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
                 total_sum = carts.get_total_price() + delivery_cost
                 payment_method = form.cleaned_data.get('payment_method')
 
-                order = Order.objects.create(
-                    user=user,
-                    name=form.cleaned_data.get('first_name') + ' ' + form.cleaned_data.get('last_name'),
-                    delivery_address=form.cleaned_data.get('city') + ' ' + form.cleaned_data.get(
-                        'street') + ' д. ' + form.cleaned_data.get('house') + ' кв. ' + form.cleaned_data.get(
-                        'apartment'),
-                    delivery_method=form.cleaned_data.get('delivery_method'),
-                    delivery_cost=delivery_cost,
-                    phone=form.cleaned_data.get('phone'),
-                    email=form.cleaned_data.get('email'),
-                    payment_method=payment_method,
-                    is_paid=False,
-                    status='created',
-                    comment=form.cleaned_data.get('comment'),
-                    summa=total_sum
-                )
-
-                for cart_item in carts:
-                    product = cart_item['product']
-                    name = product.name
-                    size = cart_item['size']
-                    price = cart_item['total_price']
-                    quantity = cart_item['quantity']
-
-                    OrderItem.objects.create(
-                        order=order,
-                        product=product,
-                        name=name,
-                        size=size,
-                        price=price,
-                        quantity=quantity,
-                    )
-
-                carts.clear()
-
                 if payment_method == 'online':
                     payment_idempotence_key = str(uuid.uuid4())
                     return_url = reverse_lazy('users:profile')
@@ -92,21 +63,56 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
                             "return_url": f"{settings.DOMAIN_NAME}/{return_url}"
                         },
                         "capture": True,
-                        "description": f"Заказ №{order.id} на сайте HeyHockey!",
-                        "metadata": {
-                            "order_id": order.id
-                        },
+                        "description": f"Заказ на сайте HeyHockey!",
                     }, payment_idempotence_key)
                     confirmation_url = payment.confirmation.confirmation_url
-                    order.payment_id = payment.id
-                    order.save()
-                    telegram(order)
+
+                    create_order(user=user, form=form, carts=carts, payment_method=payment_method,
+                                 delivery_cost=delivery_cost, total_sum=total_sum, payment_id=payment.id)
                     return redirect(confirmation_url)
                 else:
+                    order = create_order(user=user, form=form, carts=carts, payment_method=payment_method,
+                                         delivery_cost=delivery_cost, total_sum=total_sum, payment_id='')
                     telegram(order)
-                    messages.success(self.request, f"Ваш заказ №{order.id} успешно создан!")
+                    messages.success(self.request, f"Ваш заказ успешно создан!")
                     return super().form_valid(form)
 
         except Exception as e:
-            print(f'create_orders {e}')
+            logger.error(f'create_orders_view {e}')
             return redirect('carts:my_cart')
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class YookassaWebhookView(View):
+
+    def post(self, request):
+        try:
+            json_data = json.loads(request.body.decode('utf-8'))
+            print(f"Получен вебхук от YOOKASSA: {json_data}")
+
+            if json_data.get("event") != "payment.succeeded":
+                return HttpResponse(status=200)
+
+            payment_object = json_data.get("object", {})
+            payment_id = payment_object.get("id")
+
+            if not payment_id:
+                logger.error("payment_id не найден в metadata платежа")
+                return HttpResponse(status=400)
+
+            try:
+                order = Order.objects.get(payment_id=payment_id)
+            except Order.DoesNotExist:
+                logger.error(f"Заказ с payment_id={payment_id} не найден")
+                return HttpResponse(status=404)
+
+            if payment_object.get("status") == "succeeded":
+                order.is_paid = True
+                order.save()
+                telegram(order)
+
+            return HttpResponse(status=200)
+
+        except Exception as e:
+            logger.error(f"Ошибка обработки вебхука: {e}")
+            return HttpResponse(status=500)

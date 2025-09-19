@@ -1,19 +1,23 @@
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import send_mail
-
+import logging
 from .models import Order
 
+
+logger = logging.getLogger(__name__)
 
 @shared_task
 def handle_order_task(order_id, created=False):
     try:
         instance = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        logger.warning(f"Заказ с id={order_id} не найден. Возможно, задача была запущена до фиксации транзакции.")
+        return f"Order {order_id} not found"
 
+    try:
         status = instance.get_status_display()
-
         delivery_method = instance.get_delivery_method_display()
-
         payment_method = instance.get_payment_method_display()
 
         message = (
@@ -49,5 +53,7 @@ def handle_order_task(order_id, created=False):
             recipient_list=[instance.email],
             fail_silently=False,
         )
+        return "Email sent successfully"
     except Exception as e:
-        print(f'handle_order {e}')
+        logger.error(f"Ошибка в handle_order_task для заказа {order_id}: {e}")
+        return f"Error: {e}"
