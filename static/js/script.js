@@ -18,7 +18,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Функция сброса формы фильтров
 function resetForm() {
-    document.getElementById('filter-form').reset();
+    // Получаем текущий URL
+    let url = new URL(window.location);
+
+    // Определяем базовый путь
+    let basePath = url.pathname;
+
+    // Проверяем, есть ли поисковый параметр
+    const searchParams = new URLSearchParams(url.search);
+    const searchQuery = searchParams.get('q');
+
+    // Создаем новый URL без параметров фильтров
+    if (searchQuery) {
+        // Если есть поисковый запрос, сохраняем только его
+        window.location.href = basePath + '?q=' + encodeURIComponent(searchQuery);
+    } else {
+        // Если нет поискового запроса, просто перезагружаем страницу без параметров
+        window.location.href = basePath;
+    }
 }
 
 // Функция переключения изображений

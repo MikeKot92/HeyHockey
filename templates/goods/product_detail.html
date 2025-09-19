@@ -24,7 +24,7 @@
             {% if product.discount > 0 %}
               <span class="badge bg-warning position-absolute top-0 start-0 m-3">-{{ product.discount }}%</span>
             {% endif %}
-          
+
             <div id="favorites-detail" class="product position-absolute top-0 end-0 m-2">
               {% if product.id in favorites.favorites %}
                 <a href="{% url 'favorites:toggle_favorite' product.id %}" class="btn btn-danger btn-sm">
@@ -203,10 +203,13 @@
             <div class="videoobzor p-4">
               <div class="ratio ratio-16x9">
                 <iframe src="{{ product.video_src }}"
-                        allow="encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                        allow="encrypted-media; fullscreen; picture-in-picture; screen-wake-lock; autoplay;"
                         frameborder="0"
                         allowfullscreen
-                        style="border: 2px solid #df0da8;border-radius: 30px;box-shadow: -15px 15px 20px 0px rgba(0,195,179,0.6);"></iframe>
+                        loading="lazy"
+                        playsinline
+                        webkit-playsinline
+                        style="border: 2px solid #df0da8;border-radius: 30px;box-shadow: -15px 15px 20px 0px rgba(0,195,179,0.6); width: 100%; height: 100%;"></iframe>
               </div>
             </div>
           </div>
@@ -235,7 +238,7 @@
       </div>
       <div class="row g-4">
         {% for product in recommendation %}
-          {% include 'goods/components/product_card.html'%}
+          {% include 'goods/components/product_card.html' %}
         {% endfor %}
       </div>
     {% endif %}
