@@ -3,7 +3,7 @@ venv/
 .idea/
 db.sqlite3
 
-
+error_logs.log
 media/
 
 

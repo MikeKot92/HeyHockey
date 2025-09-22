@@ -27,12 +27,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-# CSRF_TRUSTED_ORIGINS = [f'https://q5fv54-5-228-114-62.ru.tuna.am']
+DEBUG = os.environ['DEBUG'] == 'True'
 
 DOMAIN_NAME = os.environ['DOMAIN_NAME']
+
+if not DEBUG:
+    ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(' ')
+else:
+    ALLOWED_HOSTS = ['*']
+
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS = os.environ['CSRF_TRUSTED_ORIGINS'].split(' ')
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -163,7 +169,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
