@@ -1,9 +1,11 @@
+import logging
+
 from celery import shared_task
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-import logging
+
 from .models import News
 
 User = get_user_model()

@@ -1,23 +1,25 @@
-import uuid
+import json
 import logging
+import uuid
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView
-from yookassa import Configuration, Payment
-import json
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import FormView
+from yookassa import Configuration, Payment
+
 from carts.cart import Cart
 from common.mixins import TitleMixin
 from orders.forms import FormOrder
 from orders.models import Order
-from orders.utils import telegram, create_order
+from orders.utils import create_order, telegram
 
 Configuration.account_id = settings.YOOKASSA_SHOP_ID
 Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
@@ -63,7 +65,7 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
                             "return_url": f"{settings.DOMAIN_NAME}/{return_url}"
                         },
                         "capture": True,
-                        "description": f"Заказ на сайте HeyHockey!",
+                        "description": "Заказ на сайте HeyHockey!",
                     }, payment_idempotence_key)
                     confirmation_url = payment.confirmation.confirmation_url
 
@@ -74,7 +76,7 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
                     order = create_order(user=user, form=form, carts=carts, payment_method=payment_method,
                                          delivery_cost=delivery_cost, total_sum=total_sum, payment_id='')
                     telegram(order)
-                    messages.success(self.request, f"Ваш заказ успешно создан!")
+                    messages.success(self.request, "Ваш заказ успешно создан!")
                     return super().form_valid(form)
 
         except Exception as e:

@@ -76,7 +76,7 @@
       </ul>
       <div class="d-flex align-items-center">
         <form class="d-flex me-3" action="{% url 'goods:search' %}" role="search" method="get">
-          <input class="form-control me-2" type="search" placeholder="Поиск товаров..." name="q">
+          <input class="form-control me-2" type="search" placeholder="Поиск..." name="q">
           <button class="btn btn-outline-light" type="submit">
             <i class="fas fa-search"></i>
           </button>
@@ -90,7 +90,9 @@
 
         <a href="{% url 'favorites:view_favorites' %}" class="btn btn-outline-light position-relative me-2">
           <i class="fas fa-heart"></i>
-
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ favorites.get_total_quantity }}
+                        </span>
         </a>
 
         {% if user.is_authenticated %}

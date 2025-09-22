@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-
+from django.contrib import messages
 from goods.models import Product
 
 from .favorites import Favorites
@@ -18,5 +18,6 @@ def toggle_favorite(request, product_id):
         favorites.remove(product.id)
     else:
         favorites.add(product.id)
+        messages.success(request, "Товар добавлен в избранное!")
 
     return redirect(request.META['HTTP_REFERER'])

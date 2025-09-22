@@ -12,7 +12,7 @@ class ProductListView(TitleMixin, ListView):
     template_name = 'goods/catalog.html'
     context_object_name = 'products'
     paginate_by = 8
-    ordering = ['-id']
+    ordering = ['-created_at']
 
     def get_queryset(self):
         queryset = super().get_queryset().distinct()

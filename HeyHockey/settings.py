@@ -30,7 +30,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = [f'https://q5fv54-5-228-114-62.ru.tuna.am']
+# CSRF_TRUSTED_ORIGINS = [f'https://q5fv54-5-228-114-62.ru.tuna.am']
 
 DOMAIN_NAME = os.environ['DOMAIN_NAME']
 # Application definition
@@ -156,6 +156,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 14
+SESSION_SAVE_EVERY_REQUEST = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -228,7 +229,6 @@ SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 SOCIAL_AUTH_GITHUB_EXTRA_DATA = [
     ('email', 'email'),
 ]
-
 
 # Logs
 LOGGING = {

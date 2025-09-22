@@ -1,7 +1,9 @@
+import logging
+
 import telebot
 from django.conf import settings
+
 from orders.models import Order, OrderItem
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -41,14 +43,14 @@ def telegram(order):
 
 def create_order(**kwargs):
     try:
-        delivery_cost =  kwargs['delivery_cost']
+        delivery_cost = kwargs['delivery_cost']
         total_sum = kwargs['total_sum']
 
         if kwargs['form'].cleaned_data.get('delivery_method') == 'pickup':
             address = ''
         else:
             address = (kwargs['form'].cleaned_data.get('city') + ' ' + kwargs['form'].cleaned_data.get(
-                    'street') + ' д. ' + kwargs['form'].cleaned_data.get('house') + ' кв. ' +
+                'street') + ' д. ' + kwargs['form'].cleaned_data.get('house') + ' кв. ' +
                        kwargs['form'].cleaned_data.get('apartment'))
 
         order = Order.objects.create(

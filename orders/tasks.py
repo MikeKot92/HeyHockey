@@ -1,11 +1,13 @@
+import logging
+
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import send_mail
-import logging
+
 from .models import Order
 
-
 logger = logging.getLogger(__name__)
+
 
 @shared_task
 def handle_order_task(order_id, created=False):

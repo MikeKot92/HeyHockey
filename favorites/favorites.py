@@ -24,8 +24,12 @@ class Favorites:
     def is_in_favorites(self, product_id):
         return product_id in self.favorites
 
+    def get_total_quantity(self):
+        return len(self.favorites)
+
     def __iter__(self):
         product_ids = self.favorites
         products = Product.objects.filter(id__in=product_ids)
         for product in products:
             yield product
+
