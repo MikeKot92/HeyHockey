@@ -161,8 +161,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Coocie
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 14
 SESSION_SAVE_EVERY_REQUEST = True
+
+# Security settings
+if not DEBUG:  # Только в production
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = 'same-origin'
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    X_FRAME_OPTIONS = 'DENY'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

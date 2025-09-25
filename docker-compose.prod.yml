@@ -48,6 +48,7 @@ services:
       - db
       - web
     restart: unless-stopped
+
   certbot:
     image: certbot/certbot
     volumes:
