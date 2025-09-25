@@ -48,15 +48,26 @@ services:
       - db
       - web
     restart: unless-stopped
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot/ --email kotukhov92@mail.ru --agree-tos --no-eff-email -d hey-hockey.ru -d www.hey-hockey.ru
+    depends_on:
+      - nginx
 
   nginx:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
       - static_volume:/usr/src/HeyHockey/static
       - media_volume:/usr/src/HeyHockey/media
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - web
     restart: unless-stopped
