@@ -11,7 +11,7 @@
         <img src="{{ site_url }}{{ news.image.url }}" alt="{{ news.name }}" style="max-width: 100%;">
     {% endif %}
     
-    <p>{{ news.description }}</p>
+    <p>{{ news.description|safe }}</p>
     
     <p><a href="{{ site_url }}{% url 'main:news' %}">Читать подробнее</a></p>
     

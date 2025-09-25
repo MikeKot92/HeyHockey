@@ -62,7 +62,7 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
                         },
                         "confirmation": {
                             "type": "redirect",
-                            "return_url": f"{settings.DOMAIN_NAME}/{return_url}"
+                            "return_url": f"{settings.DOMAIN_NAME}{return_url}"
                         },
                         "capture": True,
                         "description": "Заказ на сайте HeyHockey!",

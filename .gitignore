@@ -1,8 +1,9 @@
 .env
+.env.prod
 venv/
 .idea/
 db.sqlite3
-
+mysite_data.json
 error_logs.log
 media/
 
