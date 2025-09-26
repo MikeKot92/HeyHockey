@@ -173,6 +173,8 @@ if not DEBUG:  # Только в production
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
     X_FRAME_OPTIONS = 'DENY'
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    USE_X_FORWARDED_HOST = True
 
 
 # Internationalization
