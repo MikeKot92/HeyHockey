@@ -1,0 +1,33 @@
+name: Deploy HH
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          echo "Deploying to server..."
+          
+          cd /home/HeyHockey
+          
+          git pull origin main
+          
+          docker compose --env-file .env.prod -f docker-compose.prod.yml down
+          
+          docker compose --env-file .env.prod -f docker-compose.prod.yml up --build -d
+          
+          sleep 10
+          
+          docker compose --env-file .env.prod -f docker-compose.prod.yml ps
+          
+          docker image prune -f
