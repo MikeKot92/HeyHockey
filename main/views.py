@@ -16,7 +16,7 @@ class IndexTemplateView(TitleMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        queryset = Product.objects.all().order_by('-id')
+        queryset = Product.objects.filter(is_hit=True)
         context['popular_products'] = queryset[:4]
         return context
 

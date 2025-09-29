@@ -12,9 +12,15 @@
             <span class="text-muted small text-center px-2">{{ product.name|truncatewords:3 }}</span>
           </div>
         {% endif %}
-        {% if product.discount %}
-          <span class="badge bg-warning position-absolute top-0 start-0 m-2">-{{ product.discount }}%</span>
-        {% endif %}
+      
+        <div class="position-absolute top-0 start-0 m-2 d-flex flex-column gap-1">
+          {% if product.is_hit %}
+            <span class="badge bg-success ">Хит</span>
+          {% endif %}
+          {% if product.discount %}
+            <span class="badge bg-warning ">-{{ product.discount }}%</span>
+          {% endif %}
+        </div>
 
         <div class="product position-absolute top-0 end-0 m-2">
           {% if product.id in favorites.favorites %}

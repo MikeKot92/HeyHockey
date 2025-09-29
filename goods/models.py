@@ -81,6 +81,7 @@ class Product(models.Model):
     price = models.DecimalField(default=0.00, max_digits=7, decimal_places=2, verbose_name='Цена')
     discount = models.PositiveIntegerField(default=0, verbose_name='Скидка в %')
     status = models.SmallIntegerField(default=0, choices=STATUS, verbose_name='Статус')
+    is_hit = models.BooleanField(default=False, verbose_name='Хит')
     video_src = models.URLField(blank=True, null=True, verbose_name='SRC-video')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     category = models.ForeignKey(to=Categories, on_delete=models.CASCADE, verbose_name='Категория')
