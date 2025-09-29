@@ -5,9 +5,42 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Create .env for tests
+        run: |
+          touch .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "DB_ENGINE=django.db.backends.postgresql" >> .env
+          echo "DB_NAME=store" >> .env
+          echo "DB_USER=store" >> .env
+          echo "DB_PASSWORD=1234" >> .env
+          echo "DB_HOST=db" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "REDIS_HOST=redis" >> .env
+          echo "REDIS_PORT=6379" >> .env
+
+      - name: Start services
+        run: |
+          docker compose --env-file .env -f docker-compose.test.yml up --build -d 
+
+      - name: Run tests
+        run: |
+          docker compose exec web python manage.py test
+
+      - name: Stop services
+        if: always()
+        run: |
+          docker compose down -v
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: ${{ needs.test.result == 'success' }}
     steps:
     - name: Deploy
       uses: appleboy/ssh-action@master
