@@ -46,8 +46,10 @@ services:
       - redis_data:/data
 
   celery:
-    build: .
-    image: web:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
+    image: celery:1.0.0
     container_name: celery
     command: celery -A HeyHockey worker --loglevel=info --pool=solo
     volumes:

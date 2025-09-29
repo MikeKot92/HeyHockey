@@ -3,6 +3,9 @@ from django.urls import reverse
 
 
 class Categories(models.Model):
+    """
+    Модель категории товаров.
+    """
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
     slug = models.SlugField(max_length=200, unique=True, verbose_name='URL')
     table_size = models.ImageField(upload_to='size_table/', blank=True, verbose_name='Таблица размеров')
@@ -19,6 +22,9 @@ class Categories(models.Model):
 
 
 class League(models.Model):
+    """
+    Модель лиги.
+    """
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
     slug = models.SlugField(max_length=200, unique=True, verbose_name='URL')
 
@@ -32,6 +38,9 @@ class League(models.Model):
 
 
 class Team(models.Model):
+    """
+    Модель команды.
+    """
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
     slug = models.SlugField(max_length=200, unique=True, verbose_name='URL')
     league = models.ForeignKey(to=League, on_delete=models.CASCADE, verbose_name='Лига')
@@ -46,6 +55,9 @@ class Team(models.Model):
 
 
 class Size(models.Model):
+    """
+    Модель размера товара.
+    """
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
 
     class Meta:
@@ -58,6 +70,9 @@ class Size(models.Model):
 
 
 class Product(models.Model):
+    """
+    Модель товара.
+    """
     STATUS = ((1, 'в наличии'), (0, 'нет в наличии'),)
     image = models.ImageField(upload_to='goods_images/', blank=True)
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
@@ -94,6 +109,9 @@ class Product(models.Model):
 
 
 class ProductSize(models.Model):
+    """
+    Модель связи товара и размера.
+    """
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, verbose_name='Размер')
     availability = models.BooleanField(default=False, verbose_name='Наличие')
@@ -108,6 +126,9 @@ class ProductSize(models.Model):
 
 
 class ProductImage(models.Model):
+    """
+    Модель изображения товара.
+    """
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,

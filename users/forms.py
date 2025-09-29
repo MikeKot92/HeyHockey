@@ -7,6 +7,9 @@ User = get_user_model()
 
 
 class UserLoginForm(AuthenticationForm):
+    """
+    Форма для аутентификации пользователя.
+    """
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Логин',
@@ -32,6 +35,9 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserRegistrationForm(UserCreationForm):
+    """
+    Форма для регистрации нового пользователя.
+    """
     first_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Введите имя',
@@ -70,6 +76,9 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserProfileForm(UserChangeForm):
+    """
+    Форма для редактирования профиля пользователя.
+    """
     first_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
     }))

@@ -7,5 +7,8 @@ from .tasks import send_newsletter_task
 
 @receiver(post_save, sender=News)
 def send_newsletter(sender, instance, created, **kwargs):
+    """
+    Отправляет рассылку новостей при создании новой новости.
+    """
     if created:
         send_newsletter_task.delay(instance.id)

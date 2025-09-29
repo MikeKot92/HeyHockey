@@ -28,6 +28,9 @@ logger = logging.getLogger(__name__)
 
 
 class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
+    """
+    Представление для оформления заказа.
+    """
     title = 'Order'
     form_class = FormOrder
     template_name = 'orders/create_orders.html'
@@ -86,6 +89,9 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class YookassaWebhookView(View):
+    """
+    Представление для обработки вебхуков от YOOKASSA.
+    """
 
     def post(self, request):
         try:

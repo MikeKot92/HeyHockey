@@ -14,6 +14,9 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def send_newsletter_task(news_id):
+    """
+    Асинхронная задача для отправки рассылки новостей.
+    """
     try:
         instance = News.objects.get(id=news_id)
 

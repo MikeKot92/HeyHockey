@@ -5,6 +5,9 @@ User = get_user_model()
 
 
 class Info(models.Model):
+    """
+    Модель информационной страницы.
+    """
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
     description = models.TextField(blank=True, null=True, verbose_name='Содержание')
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
@@ -19,6 +22,9 @@ class Info(models.Model):
 
 
 class News(models.Model):
+    """
+    Модель новости.
+    """
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
     image = models.ImageField(upload_to='news/', verbose_name='Изображение')
     description = models.TextField(blank=True, null=True, verbose_name='Содержание', )
@@ -35,6 +41,9 @@ class News(models.Model):
 
 
 class Review(models.Model):
+    """
+    Модель отзыва.
+    """
     STATUS_CHOICES = (('Модерация', 'Модерация'), ('Опубликован', 'Опубликован'),)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Пользователь')
     text = models.TextField(verbose_name='Отзыв')

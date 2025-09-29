@@ -16,6 +16,9 @@ User = get_user_model()
 
 
 class UserLoginView(TitleMixin, SuccessMessageMixin, LoginView):
+    """
+    Представление для аутентификации пользователя.
+    """
     title = 'Login'
     form_class = UserLoginForm
     template_name = 'users/login.html'
@@ -29,6 +32,9 @@ class UserLoginView(TitleMixin, SuccessMessageMixin, LoginView):
 
 
 class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
+    """
+    Представление для регистрации нового пользователя.
+    """
     title = 'Registration'
     model = User
     form_class = UserRegistrationForm
@@ -44,6 +50,9 @@ class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
 
 
 class UserProfileView(TitleMixin, CacheMixin, LoginRequiredMixin, UpdateView):
+    """
+    Представление для просмотра и редактирования профиля пользователя.
+    """
     title = 'Profile'
     model = User
     form_class = UserProfileForm
@@ -66,6 +75,9 @@ class UserProfileView(TitleMixin, CacheMixin, LoginRequiredMixin, UpdateView):
 
 
 class UserLogoutView(LogoutView):
+    """
+    Представление для выхода из аккаунта.
+    """
     success_message = 'Вы вышли из аккаунта!'
 
     def dispatch(self, request, *args, **kwargs):

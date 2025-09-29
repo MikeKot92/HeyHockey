@@ -3,6 +3,9 @@ from django.core.validators import RegexValidator
 
 
 class FormOrder(forms.Form):
+    """
+    Форма для оформления заказа.
+    """
     first_name = forms.CharField(
         label='Имя',
         max_length=50,

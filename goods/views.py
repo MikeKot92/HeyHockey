@@ -7,6 +7,9 @@ from goods.utils import q_search
 
 
 class ProductListView(TitleMixin, ListView):
+    """
+    Представление для отображения списка товаров с фильтрацией.
+    """
     title = 'Catalog'
     model = Product
     template_name = 'goods/catalog.html'
@@ -53,6 +56,9 @@ class ProductListView(TitleMixin, ListView):
 
 
 class ProductDetailView(TitleMixin, DetailView):
+    """
+    Представление для отображения детальной информации о товаре.
+    """
     title = 'Product'
     model = Product
     template_name = 'goods/product_detail.html'

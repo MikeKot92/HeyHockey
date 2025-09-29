@@ -4,6 +4,9 @@ from goods.views import Product
 
 
 def q_search(query):
+    """
+    Выполняет поиск товаров по названию и описанию.
+    """
     keyword = [word for word in query.split() if len(word) > 2]
     q_objects = Q()
 

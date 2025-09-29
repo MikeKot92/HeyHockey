@@ -6,11 +6,17 @@ from .favorites import Favorites
 
 
 def view_favorites(request):
+    """
+    Отображает страницу избранных товаров пользователя.
+    """
     context = {'title': 'Favorites'}
     return render(request, 'favorites/favorites.html', context)
 
 
 def toggle_favorite(request, product_id):
+    """
+    Добавляет или удаляет товар из избранного.
+    """
     favorites = Favorites(request)
     product = get_object_or_404(Product, id=product_id)
 

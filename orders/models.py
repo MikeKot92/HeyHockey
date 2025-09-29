@@ -7,6 +7,9 @@ User = get_user_model()
 
 
 class OrderitemQueryset(models.QuerySet):
+    """
+    Кастомный QuerySet для OrderItem.
+    """
     def total_price(self):
         return sum(cart.sum() for cart in self)
 
@@ -16,6 +19,9 @@ class OrderitemQueryset(models.QuerySet):
 
 
 class Order(models.Model):
+    """
+    Модель заказа пользователя.
+    """
     PAYMENT_METHOD_CHOICES = [
         ('online', 'Онлайн оплата'),
         ('cash_on_delivery', 'Оплата при получении'),
@@ -87,6 +93,9 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
+    """
+    Модель элемента заказа.
+    """
     order = models.ForeignKey(to=Order, on_delete=models.CASCADE, related_name='items', verbose_name='Заказ')
     product = models.ForeignKey(to=Product, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Продукт')
     name = models.CharField(max_length=50, verbose_name='Название')

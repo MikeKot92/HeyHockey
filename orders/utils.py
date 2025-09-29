@@ -9,6 +9,9 @@ logger = logging.getLogger(__name__)
 
 
 def telegram(order):
+    """
+    Отправляет уведомление о заказе в Telegram.
+    """
     try:
         bot = telebot.TeleBot(settings.TELE_TOKEN)
         status = order.get_status_display()
@@ -42,6 +45,9 @@ def telegram(order):
 
 
 def create_order(**kwargs):
+    """
+    Создает заказ.
+    """
     try:
         delivery_cost = kwargs['delivery_cost']
         total_sum = kwargs['total_sum']

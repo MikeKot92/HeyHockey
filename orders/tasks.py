@@ -11,6 +11,9 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def handle_order_task(order_id, created=False):
+    """
+    Асинхронная задача для отправки email-уведомлений о заказе.
+    """
     try:
         instance = Order.objects.get(id=order_id)
     except Order.DoesNotExist:

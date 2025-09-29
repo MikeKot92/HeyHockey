@@ -2,6 +2,9 @@ from goods.models import Product, Size
 
 
 class Cart:
+    """
+    Класс для управления корзиной товаров в сессии пользователя.
+    """
     def __init__(self, request):
         self.session = request.session
         cart = self.session.get('cart', {})

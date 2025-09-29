@@ -8,6 +8,9 @@ from main.models import Info, News, Review
 
 
 class IndexTemplateView(TitleMixin, TemplateView):
+    """
+    Представление главной страницы.
+    """
     title = 'Home'
     template_name = 'main/index.html'
 
@@ -19,6 +22,9 @@ class IndexTemplateView(TitleMixin, TemplateView):
 
 
 class NewsTemplateView(TitleMixin, TemplateView):
+    """
+    Представление страницы новостей.
+    """
     title = 'News'
     template_name = 'main/news.html'
 
@@ -29,6 +35,9 @@ class NewsTemplateView(TitleMixin, TemplateView):
 
 
 class InfoDetailView(TitleMixin, DetailView):
+    """
+    Представление для отображения детальной информации.
+    """
     title = 'Info'
     model = Info
     template_name = 'main/info.html'
@@ -37,6 +46,9 @@ class InfoDetailView(TitleMixin, DetailView):
 
 
 class ReviewTemplateView(TitleMixin, TemplateView):
+    """
+    Представление страницы отзывов.
+    """
     title = 'Review'
     model = Review
     template_name = 'main/review.html'

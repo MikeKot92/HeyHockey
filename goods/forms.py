@@ -4,6 +4,9 @@ from goods.models import Categories, Size
 
 
 class FilterForm(forms.Form):
+    """
+    Форма для фильтрации и сортировки товаров.
+    """
     SORT_CHOICES = (
         ('default', 'по умолчанию'),
         ('price', 'по возрастанию'),

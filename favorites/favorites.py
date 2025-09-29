@@ -2,6 +2,9 @@ from goods.models import Product
 
 
 class Favorites:
+    """
+    Класс для управления избранными товарами пользователя через сессию.
+    """
     def __init__(self, request):
         self.session = request.session
         favorites = self.session.get('favorites', [])

@@ -6,6 +6,9 @@ from goods.models import Product, Size
 
 
 def cart_add(request, product_id):
+    """
+    Добавляет товар в корзину пользователя.
+    """
     size_value = request.POST.get('size')
     product = Product.objects.get(id=product_id)
     cart = Cart(request)
@@ -17,6 +20,9 @@ def cart_add(request, product_id):
 
 
 def cart_change(request, product_id, num, size_id, quantity):
+    """
+    Изменяет количество товара в корзине.
+    """
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     size = get_object_or_404(Size, id=size_id)
@@ -27,6 +33,9 @@ def cart_change(request, product_id, num, size_id, quantity):
 
 
 def cart_remove(request, product_id, size_id):
+    """
+    Удаляет товар из корзины.
+    """
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     size = get_object_or_404(Size, id=size_id)
@@ -35,6 +44,9 @@ def cart_remove(request, product_id, size_id):
 
 
 def cart_clear(request):
+    """
+    Удаляет все товары из корзины.
+    """
     cart = Cart(request)
     cart.clear()
     messages.success(request, "Корзина очищена")
@@ -42,5 +54,8 @@ def cart_clear(request):
 
 
 def my_cart(request):
+    """
+    Отображает страницу корзины пользователя.
+    """
     context = {'title': 'Cart'}
     return render(request, 'cart/cart.html', context)
