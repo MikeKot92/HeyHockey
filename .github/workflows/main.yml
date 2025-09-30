@@ -14,8 +14,10 @@ jobs:
       - name: Create .env for tests
         run: |
           touch .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-          echo "DB_ENGINE=django.db.backends.postgresql" >> .env
+          echo "SECRET_KEY=Test_Secrets_Key!1234" >> .env
+          echo "DEBUG=True" >> .env
+          echo "DOMAIN_NAME=http://127.0.0.1:8000" >> .env
+          echo "DB_ENGINE=django.db.backends.postgresql_psycopg2" >> .env
           echo "DB_NAME=store" >> .env
           echo "DB_USER=store" >> .env
           echo "DB_PASSWORD=1234" >> .env
@@ -23,10 +25,29 @@ jobs:
           echo "DB_PORT=5432" >> .env
           echo "REDIS_HOST=redis" >> .env
           echo "REDIS_PORT=6379" >> .env
+          echo "YOOKASSA_SHOP_ID=test_shop_id" >> .env 
+          echo "YOOKASSA_SECRET_KEY=test_secret_key" >> .env 
+          echo "TELE_TOKEN=test_token" >> .env
+          echo "CHAT=test_chat" >> .env
+          echo "EMAIL_HOST=test_smtp.example.com" >> .env
+          echo "EMAIL_PORT=587" >> .env
+          echo "EMAIL_HOST_USER=test_user" >> .env
+          echo "EMAIL_HOST_PASSWORD=test_password" >> .env 
+          echo "SOCIAL_AUTH_GITHUB_KEY=test_github_key" >> .env
+          echo "SOCIAL_AUTH_GITHUB_SECRET=test_github_secret" >> .env
+
+      - name: Build services
+        run: |
+          docker compose --env-file .env -f docker-compose.test.yml build --no-cache
 
       - name: Start services
         run: |
-          docker compose --env-file .env -f docker-compose.test.yml up --build -d 
+          docker compose --env-file .env -f docker-compose.test.yml up --wait -d
+          docker ps
+
+      - name: Migrate
+        run: |
+          docker compose exec web python manage.py migrate
 
       - name: Run tests
         run: |
@@ -42,25 +63,27 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.test.result == 'success' }}
     steps:
-    - name: Deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          echo "Deploying to server..."
-          
-          cd /home/HeyHockey
-          
-          git pull origin main
-          
-          docker compose --env-file .env.prod -f docker-compose.prod.yml down
-          
-          docker compose --env-file .env.prod -f docker-compose.prod.yml up --build -d
-          
-          sleep 10
-          
-          docker compose --env-file .env.prod -f docker-compose.prod.yml ps
-          
-          docker image prune -f
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "Deploying to server..."
+            
+            cd /home/HeyHockey
+            
+            git pull origin main
+            
+            docker compose --env-file .env.prod -f docker-compose.prod.yml down
+            
+            docker compose --env-file .env.prod -f docker-compose.prod.yml up --build -d
+            
+            sleep 10
+            
+            docker compose --env-file .env.prod -f docker-compose.prod.yml ps
+            
+            docker image prune -f
+            
+            echo "Deploy successfuly!"

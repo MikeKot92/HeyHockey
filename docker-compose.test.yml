@@ -1,15 +1,23 @@
 services:
   web:
-    build: .
-    image: web:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    image: web_test:1.0.0
+    container_name: web
+    volumes:
+      - .:/usr/src/HeyHockey
     env_file:
       - .env
     depends_on:
-        - db
-        - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   db:
     image: postgres:16-bookworm
+    container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
@@ -19,11 +27,24 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_PORT=${DB_PORT}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   redis:
     image: redis:8.2-bookworm
+    container_name: redis
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
 
 volumes:
   redis_data:
