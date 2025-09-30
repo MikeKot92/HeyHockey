@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile.test
     image: web_test:1.0.0
     container_name: web
+    command: sleep infinity
     volumes:
       - .:/usr/src/HeyHockey
     env_file:
