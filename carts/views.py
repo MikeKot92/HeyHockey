@@ -22,8 +22,6 @@ def cart_add(request, product_id):
     return HttpResponse(cart_html)
 
 
-
-
 def cart_change(request, product_id, num, size_id, quantity):
     """
     Изменяет количество товара в корзине.

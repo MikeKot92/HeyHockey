@@ -5,6 +5,7 @@ class Favorites:
     """
     Класс для управления избранными товарами пользователя через сессию.
     """
+
     def __init__(self, request):
         self.session = request.session
         favorites = self.session.get('favorites', [])
@@ -35,4 +36,3 @@ class Favorites:
         products = Product.objects.filter(id__in=product_ids)
         for product in products:
             yield product
-

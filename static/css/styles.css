@@ -392,7 +392,7 @@ html {
 /* Mobile Menu */
 @media (max-width: 991.98px) {
   body{
-    padding-top: 2rem;
+    padding-top: 3rem;
   }
 
   .navbar > .container {
