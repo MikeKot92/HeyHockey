@@ -1,4 +1,4 @@
-/* Custom Styles for SportShop */
+/* Custom Styles for HeyHockey! */
 
 
 :root {
@@ -10,6 +10,7 @@
     --dark-color: #212529;
     --light-color: #f8f9fa;
 }
+
 
 /* Global Styles */
 body {
@@ -389,13 +390,97 @@ html {
 }
 
 /* Mobile Menu */
-@media (max-width: 991px) {
-    .navbar-collapse {
-        background: rgba(13, 110, 253, 0.95);
-        margin-top: 1rem;
-        border-radius: 10px;
-        padding: 1rem;
-    }
+@media (max-width: 991.98px) {
+  body{
+    padding-top: 2rem;
+  }
+
+  .navbar > .container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .navbar-brand {
+    order: 1;
+    flex: 1;
+  }
+
+  .navbar-toggler {
+    order: 2;
+    margin-left: auto;
+  }
+
+  /* Icons move to second row and center */
+  .navbar > .container > .d-flex.align-items-center {
+    order: 3;
+    width: 100%;
+    margin-top: 0.75rem;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  /* Collapse menu on third row */
+  .navbar-collapse {
+    order: 4;
+    width: 100%;
+  }
+
+  /* Smaller icons and buttons on mobile */
+  .navbar > .container > .d-flex.align-items-center .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .navbar > .container > .d-flex.align-items-center .btn i {
+    font-size: 0.875rem;
+  }
+
+  .navbar > .container > .d-flex.align-items-center .badge {
+    font-size: 0.65rem;
+    padding: 0.25em 0.4em;
+  }
+
+  /* Smaller search form on mobile */
+  .navbar > .container > .d-flex.align-items-center form.d-flex {
+    margin-right: 0.5rem !important;
+  }
+
+  .navbar > .container > .d-flex.align-items-center form .form-control {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.5rem;
+    max-width: 120px;
+  }
+
+  .navbar > .container > .d-flex.align-items-center form .btn {
+    padding: 0.375rem 0.5rem;
+  }
+}
+
+/* Desktop layout - icons stay in same row */
+@media (min-width: 992px) {
+  .navbar > .container {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .navbar-brand {
+    order: 1;
+  }
+
+  .navbar-toggler {
+    order: 4;
+  }
+
+  .navbar-collapse {
+    order: 2;
+    flex: 1;
+  }
+
+  .navbar > .container > .d-flex.align-items-center {
+    order: 3;
+  }
 }
 
 

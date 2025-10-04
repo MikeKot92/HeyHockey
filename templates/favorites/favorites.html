@@ -10,7 +10,7 @@
 
         <div class="row g-4" id="products-grid">
           {% for product in favorites %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+            <div id="favorite-card-{{ product.id }}" class="col-lg-3 col-md-4 col-sm-6 mb-3">
               {% include 'favorites/components/favorites_card.html' %}
             </div>
           {% empty %}

@@ -1,5 +1,7 @@
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 
 from carts.cart import Cart
 from goods.models import Product, Size
@@ -15,8 +17,11 @@ def cart_add(request, product_id):
     quantity = 1
     size = Size.objects.get(name=size_value)
     cart.add(product=product, size=size, quantity=quantity)
-    messages.success(request, "Товар добавлен в корзину!")
-    return redirect(request.META['HTTP_REFERER'])
+
+    cart_html = render_to_string('cart/cart_count_badge.html', request=request)
+    return HttpResponse(cart_html)
+
+
 
 
 def cart_change(request, product_id, num, size_id, quantity):

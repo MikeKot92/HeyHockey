@@ -1,0 +1,17 @@
+
+{% if product.id in favorites.favorites %}
+  <a class="btn btn-danger btn-sm"
+     hx-post="{% url 'favorites:toggle_favorite' product.id %}{% if on_favorites_page %}?from=favorites{% endif %}"
+     hx-target="{% if on_favorites_page %}#favorite-card-{{ product.id }}{% else %}#favorites-detail-{{ product.id }}{% endif %}"
+     hx-swap="{% if on_favorites_page %}delete{% else %}innerHTML{% endif %}">
+    <i class="fas fa-heart"></i>
+  </a>
+{% else %}
+  <a class="btn btn-light btn-sm"
+     hx-post="{% url 'favorites:toggle_favorite' product.id %}{% if on_favorites_page %}?from=favorites{% endif %}"
+     hx-target="#favorites-detail-{{ product.id }}"
+     hx-swap="innerHTML">
+    <i class="fas fa-heart"></i>
+  </a>
+{% endif %}
+

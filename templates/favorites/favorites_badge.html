@@ -1,0 +1,8 @@
+<a href="{% url 'favorites:view_favorites' %}" class="btn btn-outline-light position-relative me-2">
+  <i class="fas fa-heart"></i>
+  {% if favorites.get_total_quantity %}
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      {{ favorites.get_total_quantity }}
+    </span>
+  {% endif %}
+</a>

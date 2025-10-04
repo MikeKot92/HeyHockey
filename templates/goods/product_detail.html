@@ -24,18 +24,11 @@
             {% if product.discount > 0 %}
               <span class="badge bg-warning position-absolute top-0 start-0 m-3">-{{ product.discount }}%</span>
             {% endif %}
-
-            <div id="favorites-detail" class="product position-absolute top-0 end-0 m-2">
-              {% if product.id in favorites.favorites %}
-                <a href="{% url 'favorites:toggle_favorite' product.id %}" class="btn btn-danger btn-sm">
-                  <i class="fas fa-heart"></i>
-                </a>
-              {% else %}
-                <a href="{% url 'favorites:toggle_favorite' product.id %}" class="btn btn-light btn-sm">
-                  <i class="fas fa-heart"></i>
-                </a>
-              {% endif %}
+            
+            <div id="favorites-detail-{{ product.id }}" class="product position-absolute top-0 end-0 m-2">
+              {% include 'favorites/favorite_button.html' %}
             </div>
+          
           </div>
 
           <!-- Миниатюры -->
@@ -102,8 +95,18 @@
             {% endif %}
 
             {% if status %}
-              <form action="{% url 'cart:cart_add' product.id %}" method="post" class="d-flex flex-column mb-2">
+              <form id="add-to-cart-form-{{ product.id }}"
+                action="{% url 'cart:cart_add' product.id %}"
+                method="post"
+                class="d-flex flex-column mb-2"
+                hx-post="{% url 'cart:cart_add' product.id %}"
+                hx-target="#cart_badge" 
+                hx-swap="innerHTML" 
+                hx-include="#csrf-hidden-input-{{ product.id }}"
+                hx-on::after-request="this.reset()">
                 {% csrf_token %}
+                <input type="hidden" id="csrf-hidden-input-{{ product.id }}" name="csrfmiddlewaretoken"
+                       value="{{ csrf_token }}">
 
                 {% if 'Б/р' in sizes %}
                   <input type="hidden" name="size" value="Б/р">
@@ -113,21 +116,22 @@
                   </div>
                   <div class="size-options mb-3">
                     {% for size in sizes %}
-                      <input type="radio" class="btn-check" name="size" id="size-{{ size }}" value="{{ size }}"
-                             required>
+                      <input type="radio" class="btn-check" name="size" id="size-{{ size }}" value="{{ size }}" required>
                       <label class="btn btn-outline-primary" for="size-{{ size }}">{{ size }}</label>
                     {% endfor %}
                   </div>
                 {% endif %}
 
+                <!-- Кнопка отправки формы -->
                 <button type="submit" class="btn btn-success btn-lg flex-fill">
                   <i class="fas fa-cart-plus me-2"></i>Добавить в корзину
                 </button>
               </form>
+              <!-- /Модифицированная форма -->
             {% else %}
               <strong>
                 &bull; В данный момент этого товара нет в наличии,
-                сроки поступления можно уточнить у менеджера.
+                сроки поступления можно уточнить у менежра.
               </strong>
             {% endif %}
           </div>
@@ -260,7 +264,17 @@
       </div>
     </div>
   {% endif %}
-
-
+  
+  <script>
+    document.body.addEventListener('htmx:afterSwap', function(event) {
+        if (event.detail.target.id === 'cart_badge') {
+            const forms = document.querySelectorAll('[id^="add-to-cart-form-"]');
+            forms.forEach(form => {
+                form.reset();
+            });
+        }
+    });
+  </script>
+</body>
+</html>
 {% endblock %}
-

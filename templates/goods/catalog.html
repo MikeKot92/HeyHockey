@@ -2,94 +2,90 @@
 {% load static %}
 {% load goods_tags %}
 
-
-
 {% block content %}
   <!-- Catalog -->
   <div class="container py-4">
     <div class="row">
       <!-- Filters Sidebar -->
-      <div class="col-lg-3 mb-4 mt-5">
-        <div class="card shadow-sm">
-          <div class="card-header bg-light">
-            <h5 class="mb-0">Фильтры</h5>
-          </div>
-          <div class="card-body">
-            <form action="{% if request.GET.q %}{% url 'goods:search' %}{% endif %}" method="get" id="filter-form">
+      <div class="col-lg-3 mb-1 mt-5">
 
-              {% if request.GET.q %}
-                <input type="hidden" name="q" value="{{ request.GET.q }}">
-              {% endif %}
+        <button class="btn btn-outline-primary w-100 mb-2 mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#filtersCollapse" aria-expanded="true" aria-controls="filtersCollapse">
+          <i class="fas fa-filter me-2"></i>Фильтры
+        </button>
 
-              <!-- Сортировка -->
-              <div class="mb-4">
-                <h6>{{ form.price.label }}</h6>
-                {{ form.price }}
-              </div>
 
-              <!-- Товары по акции -->
-              <div class="mb-4">
-                <div class="form-check">
-                  {{ form.discount }}
-                  <label class="form-check-label" for="{{ form.discount.id_for_label }}">
-                    {{ form.discount.label }}
-                  </label>
+        <div class="collapse show" id="filtersCollapse"> 
+          <div class="card shadow-sm">
+            <div class="card-body">
+              
+              <form action="{% if request.GET.q %}{% url 'goods:search' %}{% endif %}" method="get" id="filter-form">
+
+                {% if request.GET.q %}
+                  <input type="hidden" name="q" value="{{ request.GET.q }}">
+                {% endif %}
+
+                
+                <div class="mb-4">
+                  <h6>{{ form.price.label }}</h6>
+                  {{ form.price }}
                 </div>
-              </div>
 
-              <!-- Категории -->
-              <div class="mb-4">
-                <h6>{{ form.category.label }}</h6>
-                {% for choice in form.category %}
+                
+                <div class="mb-4">
                   <div class="form-check">
-                    {{ choice.tag }}
-                    <label class="form-check-label" for="{{ choice.id_for_label }}">
-                      {{ choice.choice_label }}
+                    {{ form.discount }}
+                    <label class="form-check-label" for="{{ form.discount.id_for_label }}">
+                      {{ form.discount.label }}
                     </label>
                   </div>
-                {% endfor %}
-              </div>
+                </div>
 
-              <!-- Размеры -->
-              <div class="mb-4">
-                <h6>{{ form.size.label }}</h6>
-                {% for choice in form.size %}
-                  <div class="form-check">
-                    {{ choice.tag }}
-                    <label class="form-check-label" for="{{ choice.id_for_label }}">
-                      {{ choice.choice_label }}
-                    </label>
-                  </div>
-                {% endfor %}
-              </div>
-
-
-              <!-- Кнопки -->
-              <button type="submit" class="btn btn-primary w-100">
-                <i class="fas fa-filter me-2"></i>Применить фильтры
-              </button>
-              <button type="button" class="btn btn-outline-secondary w-100 mt-2" onclick="resetForm()">
-                <i class="fas fa-times me-2"></i>Сбросить
-              </button>
-            </form>
+                <div class="mb-4">
+                  <h6>{{ form.category.label }}</h6>
+                  {% for choice in form.category %}
+                    <div class="form-check">
+                      {{ choice.tag }}
+                      <label class="form-check-label" for="{{ choice.id_for_label }}">
+                        {{ choice.choice_label }}
+                      </label>
+                    </div>
+                  {% endfor %}
+                </div>
+              
+                <div class="mb-4">
+                  <h6>{{ form.size.label }}</h6>
+                  {% for choice in form.size %}
+                    <div class="form-check">
+                      {{ choice.tag }}
+                      <label class="form-check-label" for="{{ choice.id_for_label }}">
+                        {{ choice.choice_label }}
+                      </label>
+                    </div>
+                  {% endfor %}
+                </div>
+              
+                <button type="submit" class="btn btn-primary w-100">
+                  <i class="fas fa-filter me-2"></i>Применить фильтры
+                </button>
+                <button type="button" class="btn btn-outline-secondary w-100 mt-2" onclick="resetForm()">
+                  <i class="fas fa-times me-2"></i>Сбросить
+                </button>
+              </form>
+            </div>
           </div>
         </div>
+
       </div>
 
       <!-- Products Grid -->
       <div class="col-lg-9 mt-5">
-
         <!-- Products -->
         <div class="row g-4 mt-2" id="products-grid">
-
           {% for product in products %}
-            
-              {% include 'goods/components/product_card.html' %}
-            
+            {% include 'goods/components/product_card.html' %}
           {% empty %}
             <h3>Ничего не найдено... <i class="bi bi-search"></i></h3>
           {% endfor %}
-
         </div>
 
         <!-- Pagination -->
@@ -116,10 +112,7 @@
             {% endif %}
           </div>
         {% endif %}
-      
-
       </div>
     </div>
   </div>
-  
 {% endblock %}

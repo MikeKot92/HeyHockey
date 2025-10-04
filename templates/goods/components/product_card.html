@@ -22,18 +22,10 @@
           {% endif %}
         </div>
 
-        <div class="product position-absolute top-0 end-0 m-2">
-          {% if product.id in favorites.favorites %}
-            <a href="{% url 'favorites:toggle_favorite' product.id %}" class="btn btn-danger btn-sm">
-              <i class="fas fa-heart"></i>
-            </a>
-          {% else %}
-            <a href="{% url 'favorites:toggle_favorite' product.id %}" class="btn btn-light btn-sm">
-              <i class="fas fa-heart"></i>
-            </a>
-          {% endif %}
+        <div id="favorites-detail-{{ product.id }}" class="product position-absolute top-0 end-0 m-2">
+          {% include 'favorites/favorite_button.html' %}
         </div>
-
+      
       </div>
       <div class="card-body">
         <h6 class="card-title">{{ product.name }}</h6>

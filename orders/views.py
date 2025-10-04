@@ -51,8 +51,15 @@ class CreateOrderView(LoginRequiredMixin, TitleMixin, FormView):
             with transaction.atomic():
                 user = self.request.user
                 carts = Cart(self.request)
-                delivery_cost = 0 if form.cleaned_data.get('delivery_method') == 'pickup' else 500
-                total_sum = carts.get_total_price() + delivery_cost
+                base_total = carts.get_total_price()
+                if form.cleaned_data.get('delivery_method') == 'courier' and base_total<5000:
+                    delivery_cost=500
+                else:
+                    delivery_cost=0
+
+                #delivery_cost = 0 if form.cleaned_data.get('delivery_method') == 'pickup' else 500
+                total_sum = base_total + delivery_cost
+
                 payment_method = form.cleaned_data.get('payment_method')
 
                 if payment_method == 'online':
